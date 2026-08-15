@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เข้าสู่ระบบ - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
@@ -13,6 +13,7 @@
             <h2>📚 EDUVA Learn Track</h2>
             <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">ยินดีต้อนรับสู่ระบบติดตามการเรียนรู้</p>
 
+            <!-- ฟอร์มเข้าสู่ระบบ -->
             <div id="loginBox">
                 <h3>เข้าสู่ระบบ</h3>
                 <form id="loginForm">
@@ -30,6 +31,7 @@
                 <p style="font-size: 13px; margin-top: 15px;">ยังไม่มีบัญชี? <a href="#" onclick="toggleAuth(true)" style="color:#315efb; font-weight:600;">สมัครสมาชิกที่นี่</a></p>
             </div>
 
+            <!-- ฟอร์มสมัครสมาชิก -->
             <div id="signupBox" style="display: none;">
                 <h3>สมัครสมาชิก</h3>
                 <form id="signupForm">
@@ -44,4 +46,18 @@
                     <button type="submit" class="btn-primary" style="background-color: #10b981;">สมัครสมาชิก</button>
                 </form>
                 <p id="message" class="msg-box"></p>
-                <p style="font-size: 13px; margin-top: 15px;">มีบัญชีอยู่แล้ว? <a href
+                <p style="font-size: 13px; margin-top: 15px;">มีบัญชีอยู่แล้ว? <a href="#" onclick="toggleAuth(false)" style="color:#315efb; font-weight:600;">เข้าสู่ระบบ</a></p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleAuth(showSignup) {
+            document.getElementById('loginBox').style.display = showSignup ? 'none' : 'block';
+            document.getElementById('signupBox').style.display = showSignup ? 'block' : 'none';
+        }
+    </script>
+    <script type="module" src="app.js?v=13"></script>
+</body>
+</html>
