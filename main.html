@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile & Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
-    <!-- แถบ Navbar -->
     <nav class="navbar">
         <h2>📚 EDUVA Learn Track</h2>
         <div class="user-info">
@@ -18,10 +17,7 @@
         </div>
     </nav>
 
-    <!-- พื้นที่เนื้อหาหลัก -->
     <div class="container">
-        
-        <!-- การ์ดโปรไฟล์ -->
         <div class="profile-card">
             <div class="profile-banner"></div>
             
@@ -32,45 +28,37 @@
             <h2 style="margin: 10px 0 2px 0; color: #0f172a;" id="welcomeName">ผู้ใช้งาน</h2>
             <div><span class="email-badge" id="userEmail">กำลังโหลด...</span></div>
 
-            <!-- กล่องตั้งค่าโปรไฟล์ -->
             <div class="settings-grid">
-                
-                <!-- 1. เปลี่ยนชื่อ -->
                 <div class="settings-box">
-                    <h4>✏️ เปลี่ยนชื่อโปรไฟล์ (Display Name)</h4>
+                    <h4>✏️ เปลี่ยนชื่อโปรไฟล์</h4>
                     <div class="input-group">
                         <input type="text" id="displayNameInput" class="input-field" placeholder="กรอกชื่อของคุณ">
                         <button id="saveProfileBtn" class="btn-action">บันทึกชื่อ</button>
                     </div>
                 </div>
 
-                <!-- 2. เลือก/อัปโหลดรูปโปรไฟล์ -->
                 <div class="settings-box">
-                    <h4>🖼️ รูปโปรไฟล์ (Profile Picture)</h4>
-                    
+                    <h4>🖼️ รูปโปรไฟล์</h4>
                     <div style="margin-bottom: 12px;">
                         <label style="font-size: 13px; font-weight: 600; color: #475569; display: block; margin-bottom: 6px;">
-                            📁 เลือกไฟล์รูปจากเครื่อง (ย่อให้อัตโนมัติ):
+                            📁 เลือกไฟล์รูปจากเครื่อง:
                         </label>
                         <input type="file" id="fileInput" accept="image/*" class="input-field" style="padding: 6px; background: #fff;">
                     </div>
-
                     <div style="font-size: 12px; color: #64748b; margin-bottom: 8px; margin-top: 15px;">หรือเลือก Avatar สำเร็จรูป:</div>
                     <div class="preset-container">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu')" title="Robot">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix')" title="Boy">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia')" title="Girl">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat')" title="Emoji">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/adventurer/svg?seed=Hero" onclick="selectPreset('https://api.dicebear.com/7.x/adventurer/svg?seed=Hero')" title="Hero">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu')">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix')">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia')">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat')">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/adventurer/svg?seed=Hero" onclick="selectPreset('https://api.dicebear.com/7.x/adventurer/svg?seed=Hero')">
                     </div>
                 </div>
-
             </div>
 
             <p id="profileMsg" class="msg-box" style="margin-bottom: 15px;"></p>
         </div>
 
-        <!-- การ์ดฟีเจอร์ แดชบอร์ด -->
         <div class="grid">
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
@@ -101,6 +89,6 @@
 
     </div>
 
-    <script type="module" src="app.js?v=12"></script>
+    <script type="module" src="app.js?v=13"></script>
 </body>
 </html>
