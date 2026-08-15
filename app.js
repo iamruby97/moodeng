@@ -7,14 +7,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('name-input');
     const saveNameBtn = document.getElementById('save-name-btn');
 
-    // เปิด-ปิดเมนูตั้งค่าเมื่อกดปุ่ม ⚙️
+    // เปิด-ปิดเมนูตั้งค่า
     if (settingsBtn && settingsMenu) {
-        settingsBtn.addEventListener('click', () => {
+        settingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             settingsMenu.classList.toggle('hidden');
+        });
+
+        // คลิกพื้นที่อื่นในหน้าจอเพื่อปิดเมนูตั้งค่า
+        document.addEventListener('click', (e) => {
+            if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) {
+                settingsMenu.classList.add('hidden');
+            }
         });
     }
 
-    // เปลี่ยนรูปโปรไฟล์
+    // อัปโหลดเปลี่ยนรูปโปรไฟล์
     if (imageInput && profileImg) {
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -35,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (newName !== '') {
                 usernameText.textContent = newName;
                 nameInput.value = '';
-                settingsMenu.classList.add('hidden'); // บันทึกเสร็จปิดเมนู
+                settingsMenu.classList.add('hidden');
             }
         });
     }
