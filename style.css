@@ -11,15 +11,11 @@ body {
     color: #333;
 }
 
-/* Navbar แบบจัดชิดซ้าย-ขวา */
 .navbar {
     width: 100%;
-    padding: 12px 30px;
+    padding: 15px 30px;
     background: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .logo {
@@ -28,20 +24,30 @@ body {
     color: #1a73e8;
 }
 
-/* ส่วนโปรไฟล์มุมขวาบน */
-.top-right-profile {
+/* =========================================
+   ตำแหน่งโปรไฟล์ขวาบนสุด (Fixed Top Right)
+   ========================================= */
+.fixed-top-right {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.profile-box {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: #f8fafc;
-    padding: 6px 14px 6px 6px;
+    gap: 10px;
+    background: #ffffff;
+    padding: 6px 12px 6px 6px;
     border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: 1px solid #e2e8f0;
 }
 
 .user-avatar {
-    width: 40px !important;
-    height: 40px !important;
+    width: 38px !important;
+    height: 38px !important;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #1a73e8;
@@ -50,30 +56,96 @@ body {
 .user-info {
     display: flex;
     flex-direction: column;
-    text-align: left;
 }
 
 .username {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     line-height: 1.2;
 }
 
 .email {
-    font-size: 11px;
+    font-size: 10px;
     color: #666;
 }
 
-/* คอนเทนเนอร์เนื้อหาหลักตรงกลาง */
-.dashboard-container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 0 20px;
+.settings-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
 }
 
-img {
-    max-width: 100%;
-    height: auto;
+.settings-btn:hover {
+    transform: rotate(45deg);
+}
+
+/* เมนูป๊อปอัพตั้งค่า */
+.settings-dropdown {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    width: 260px;
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: #444;
+}
+
+.input-inline {
+    display: flex;
+    gap: 6px;
+}
+
+.input-inline input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+}
+
+.input-inline button {
+    padding: 6px 10px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.input-group input[type="file"] {
+    font-size: 11px;
+}
+
+/* =========================================
+   เนื้อหาหลักตรงกลาง
+   ========================================= */
+.dashboard-container {
+    max-width: 900px;
+    margin: 60px auto 40px auto;
+    padding: 0 20px;
 }
 
 .grid-cards {
