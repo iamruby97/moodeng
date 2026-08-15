@@ -253,3 +253,23 @@ if (fileInput) {
         }
     });
 }
+// --- 7. เอฟเฟกต์พื้นหลังตามเมาส์ (Cursor Glow) ---
+const createCursorGlow = () => {
+    // ตรวจสอบก่อนว่าไม่ได้เล่นบนมือถือ (หน้าจอเล็กกว่า 768px มักเป็นระบบสัมผัส)
+    if (window.innerWidth <= 768) return;
+
+    // สร้างกล่อง div สำหรับทำวงแสง
+    const cursorGlow = document.createElement('div');
+    cursorGlow.classList.add('cursor-glow');
+    document.body.appendChild(cursorGlow);
+
+    // ดักจับการขยับของเมาส์
+    document.addEventListener('mousemove', (e) => {
+        // อัปเดตตำแหน่งแกน X และ Y ให้ตรงกับเมาส์
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+    });
+};
+
+// เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเว็บ
+createCursorGlow();
