@@ -20,30 +20,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// --- ตรวจสอบสถานะการล็อกอิน ---
+// --- ตรวจสอบสถานะการล็อกอินอัตโนมัติ ---
 onAuthStateChanged(auth, (user) => {
-    const currentPage = window.location.pathname.split("/").pop();
+    const isMainPage = window.location.pathname.includes("main.html");
 
     if (user) {
-        // ถ้าล็อกอินแล้ว แต่อยู่หน้าเข้าสู่ระบบ (index.html) ให้ส่งไปหน้า main.html
-        if (currentPage === "index.html" || currentPage === "") {
+        // ถ้าล็อกอินแล้ว แต่ไม่ได้อยู่หน้า main.html ให้ส่งไปหน้า main.html ทันที
+        if (!isMainPage) {
             window.location.href = "main.html";
-        }
-        
-        // ถ้าอยู่หน้า main.html ให้แสดงอีเมลผู้ใช้
-        const userEmailEl = document.getElementById('userEmail');
-        if (userEmailEl) {
-            userEmailEl.textContent = user.email;
+        } else {
+            // แสดงอีเมลในหน้า main.html
+            const userEmailEl = document.getElementById('userEmail');
+            if (userEmailEl) {
+                userEmailEl.textContent = user.email;
+            }
         }
     } else {
-        // ถ้ายังไม่ได้ล็อกอิน แต่อยู่หน้า main.html ให้ส่งกลับไปหน้าเข้าสู่ระบบ
-        if (currentPage === "main.html") {
+        // ถ้ายังไม่ได้ล็อกอิน แต่อยู่หน้า main.html ให้ส่งกลับหน้าแรก
+        if (isMainPage) {
             window.location.href = "index.html";
         }
     }
 });
 
-// --- 1. สมัครสมาชิก ---
+// --- 1. ระบบสมัครสมาชิก ---
 const signupForm = document.getElementById('signupForm');
 const message = document.getElementById('message');
 
@@ -65,7 +65,7 @@ if (signupForm) {
     });
 }
 
-// --- 2. เข้าสู่ระบบ ---
+// --- 2. ระบบเข้าสู่ระบบ ---
 const loginForm = document.getElementById('loginForm');
 const loginMessage = document.getElementById('loginMessage');
 
@@ -87,7 +87,7 @@ if (loginForm) {
     });
 }
 
-// --- 3. ออกจากระบบ ---
+// --- 3. ระบบออกจากระบบ ---
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
