@@ -5,26 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUVA Learn Track</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=9002">
+    <link rel="stylesheet" href="style.css?v=9003">
 </head>
 <body>
 
     <header class="navbar">
         <div class="logo">📚 EDUVA Learn Track</div>
+    </header>
 
-        <!-- ย้ายการ์ดโปรไฟล์มาไว้ใน navbar เพื่อจัดตำแหน่งขวาบน -->
-        <div class="top-right-profile">
+    <!-- กล่องโปรไฟล์ลอยอยู่มุมขวาบนสุด -->
+    <div class="fixed-top-right">
+        <div class="profile-box">
             <img id="profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
             <div class="user-info">
                 <h2 id="username-text" class="username">puupy</h2>
                 <p class="email">im1ssolddc@gmail.com</p>
             </div>
+            <!-- ปุ่มตั้งค่า -->
+            <button id="settings-btn" class="settings-btn" title="ตั้งค่าโปรไฟล์">⚙️</button>
         </div>
-    </header>
 
+        <!-- เมนูป๊อปอัพตั้งค่า (ซ่อนไว้ก่อน) -->
+        <div id="settings-menu" class="settings-dropdown hidden">
+            <div class="input-group">
+                <label>✏️ เปลี่ยนชื่อโปรไฟล์</label>
+                <div class="input-inline">
+                    <input type="text" id="name-input" placeholder="กรอกชื่อใหม่">
+                    <button id="save-name-btn">บันทึก</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>🖼️ อัปโหลดรูปโปรไฟล์</label>
+                <input type="file" id="image-input" accept="image/*">
+            </div>
+        </div>
+    </div>
+
+    <!-- คอนเทนเนอร์เนื้อหาหลักตรงกลาง -->
     <main class="dashboard-container">
-        
-        <!-- การ์ด 3 ช่องตรงกลาง -->
         <section class="grid-cards">
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
@@ -52,9 +70,8 @@
                 </div>
             </div>
         </section>
-
     </main>
 
-    <script type="module" src="app.js?v=9002"></script>
+    <script type="module" src="app.js?v=9003"></script>
 </body>
 </html>
