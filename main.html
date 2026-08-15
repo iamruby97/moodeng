@@ -3,66 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile & Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=13">
+    <title>EDUVA Learn Track</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- ใส่ ?v=999 เพื่อบังคับล้างแคช -->
+    <link rel="stylesheet" href="style.css?v=999">
 </head>
 <body>
 
-    <nav class="navbar">
-        <h2>📚 EDUVA Learn Track</h2>
-        <div class="user-info">
-            <img id="navAvatar" class="avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu" alt="Avatar">
-            <span id="userDisplayName" style="font-weight: 600; color: #1e293b;">กำลังโหลด...</span>
-            <button id="logoutBtn" class="btn-logout">ออกจากระบบ</button>
-        </div>
-    </nav>
+    <!-- แถบด้านบน -->
+    <header class="navbar">
+        <div class="logo">📚 EDUVA Learn Track</div>
+    </header>
 
-    <div class="container">
-        <div class="profile-card">
-            <div class="profile-banner"></div>
+    <!-- คอนเทนเนอร์หลัก -->
+    <main class="dashboard-container">
+        
+        <!-- ส่วนโปรไฟล์ตรงกลาง -->
+        <section class="profile-card">
+            <div class="avatar-wrapper">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
+            </div>
+            <h2 class="username">puupy</h2>
+            <p class="email">im1ssolddc@gmail.com</p>
+        </section>
+
+        <!-- การ์ด 3 ช่องด้านล่าง -->
+        <section class="grid-cards">
             
-            <div class="avatar-large-container">
-                <img id="userAvatar" class="avatar-large" src="https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu" alt="Profile Picture">
-            </div>
-
-            <h2 style="margin: 10px 0 2px 0; color: #0f172a;" id="welcomeName">ผู้ใช้งาน</h2>
-            <div><span class="email-badge" id="userEmail">กำลังโหลด...</span></div>
-
-            <div class="settings-grid">
-                <div class="settings-box">
-                    <h4>✏️ เปลี่ยนชื่อโปรไฟล์</h4>
-                    <div class="input-group">
-                        <input type="text" id="displayNameInput" class="input-field" placeholder="กรอกชื่อของคุณ">
-                        <button id="saveProfileBtn" class="btn-action">บันทึกชื่อ</button>
-                    </div>
-                </div>
-
-                <div class="settings-box">
-                    <h4>🖼️ รูปโปรไฟล์</h4>
-                    <div style="margin-bottom: 12px;">
-                        <label style="font-size: 13px; font-weight: 600; color: #475569; display: block; margin-bottom: 6px;">
-                            📁 เลือกไฟล์รูปจากเครื่อง:
-                        </label>
-                        <input type="file" id="fileInput" accept="image/*" class="input-field" style="padding: 6px; background: #fff;">
-                    </div>
-                    <div style="font-size: 12px; color: #64748b; margin-bottom: 8px; margin-top: 15px;">หรือเลือก Avatar สำเร็จรูป:</div>
-                    <div class="preset-container">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/adventurer/svg?seed=Hero" onclick="selectPreset('https://api.dicebear.com/7.x/adventurer/svg?seed=Hero')">
-                    </div>
-                </div>
-            </div>
-
-            <p id="profileMsg" class="msg-box" style="margin-bottom: 15px;"></p>
-        </div>
-
-        <div class="grid">
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
-                <ul style="padding-left: 18px; color: #475569; line-height: 1.8; margin-bottom: 0;">
+                <ul>
                     <li>Web Development (HTML/CSS/JS)</li>
                     <li>Firebase Database Integration</li>
                     <li>UI/UX Design Basics</li>
@@ -71,7 +41,7 @@
 
             <div class="card">
                 <h3>✅ งานที่ต้องทำ (To-Do)</h3>
-                <ul style="padding-left: 18px; color: #475569; line-height: 1.8; margin-bottom: 0;">
+                <ul>
                     <li>อัปเดตระบบล็อกอิน Firebase</li>
                     <li>จัดหน้าแดชบอร์ดให้สวยงาม</li>
                     <li>ทดสอบระบบบนมือถือ</li>
@@ -80,15 +50,16 @@
 
             <div class="card">
                 <h3>📊 เป้าหมายสัปดาห์นี้</h3>
-                <p style="color: #475569;">ความก้าวหน้า: <strong>75%</strong></p>
-                <div style="background: #e2e8f0; border-radius: 10px; height: 10px; overflow: hidden; margin-top: 10px;">
-                    <div style="width: 75%; background: #315efb; height: 100%;"></div>
+                <p>ความก้าวหน้า: <strong>75%</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </section>
 
-    <script type="module" src="app.js?v=13"></script>
+    </main>
+
+    <script type="module" src="app.js?v=999"></script>
 </body>
 </html>
