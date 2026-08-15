@@ -5,50 +5,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUVA Learn Track</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=999999">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #e0f7fa;
+            color: #333;
+        }
+
+        /* เคลียร์ UI โปรไฟล์เดิมที่เรนเดอร์ค้างกลางหน้าจอ */
+        main > img, main > h2, main > p, 
+        .dashboard-container > div:first-child:not(.grid-cards),
+        .user-card, .profile-card {
+            display: none !important;
+        }
+
+        /* Navbar ด้านบน */
+        .navbar {
+            width: 100%;
+            height: 65px;
+            padding: 0 30px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 9999;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 18px;
+            color: #1a73e8;
+        }
+
+        /* ส่วนโปรไฟล์ขวาบน */
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-avatar-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            outline: none;
+        }
+
+        .profile-avatar-btn img {
+            width: 42px !important;
+            height: 42px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            border: 2px solid #1a73e8 !important;
+            transition: transform 0.2s ease;
+        }
+
+        .profile-avatar-btn img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Popover Menu ที่แสดงเมื่อกดรูปโปรไฟล์ */
+        .profile-popover {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            width: 260px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10000;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .popover-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .popover-header img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .popover-user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.2;
+        }
+
+        .popover-user-info p {
+            font-size: 11px;
+            color: #64748b;
+            word-break: break-all;
+        }
+
+        .popover-divider {
+            border: none;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .popover-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .input-inline {
+            display: flex;
+            gap: 6px;
+        }
+
+        .input-inline input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .input-inline button {
+            padding: 6px 10px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* การ์ดคอนเทนต์หลัก */
+        .dashboard-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #1a73e8;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1a73e8;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- แถบ Navbar ด้านบนสุด -->
-    <header class="navbar" style="width: 100%; height: 65px; padding: 0 30px; background: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 999;">
-        <div class="logo" style="font-weight: 600; font-size: 18px; color: #1a73e8;">📚 EDUVA Learn Track</div>
+    <header class="navbar">
+        <div class="logo">📚 EDUVA Learn Track</div>
 
-        <!-- ปุ่มโปรไฟล์ขวาบนสุด -->
-        <div class="user-profile-wrapper" style="position: relative;">
-            <button id="profile-btn" class="profile-btn" style="background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center;">
-                <img id="profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #1a73e8;">
+        <!-- ปุ่มรูปโปรไฟล์ทรงกลมมุมขวาบน -->
+        <div class="profile-container">
+            <button id="profile-avatar-btn" class="profile-avatar-btn">
+                <img id="nav-profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
             </button>
 
-            <!-- Dropdown UI ที่จะแสดงเมื่อกดรูปโปรไฟล์ -->
-            <div id="profile-dropdown" class="profile-dropdown hidden" style="position: absolute; top: 55px; right: 0; width: 260px; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; padding: 16px; z-index: 10000;">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                    <img id="dropdown-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">
-                    <div>
-                        <h4 id="username-text" style="font-size: 14px; font-weight: 600; color: #1e293b; margin: 0;">puupy</h4>
-                        <p id="email-text" style="font-size: 11px; color: #64748b; margin: 0; word-break: break-all;">im1ssolddc@gmail.com</p>
+            <!-- Popover แสดงชื่อ-อีเมล เมื่อกดที่รูป -->
+            <div id="profile-popover" class="profile-popover hidden">
+                <div class="popover-header">
+                    <img id="popover-profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                    <div class="popover-user-info">
+                        <h4 id="display-username">puupy</h4>
+                        <p id="display-email">im1ssolddc@gmail.com</p>
                     </div>
                 </div>
-                
-                <hr style="border: none; border-top: 1px solid #f1f5f9; margin-bottom: 12px;">
 
-                <div style="display: flex; flex-direction: column; gap: 10px;">
+                <hr class="popover-divider">
+
+                <div class="popover-body">
                     <div class="input-group">
-                        <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 4px;">✏️ เปลี่ยนชื่อโปรไฟล์</label>
-                        <div style="display: flex; gap: 6px;">
-                            <input type="text" id="name-input" placeholder="กรอกชื่อใหม่" style="flex: 1; padding: 5px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none;">
-                            <button id="save-name-btn" style="padding: 5px 10px; background: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">บันทึก</button>
+                        <label>✏️ เปลี่ยนชื่อโปรไฟล์</label>
+                        <div class="input-inline">
+                            <input type="text" id="new-name-input" placeholder="กรอกชื่อใหม่">
+                            <button id="btn-save-name">บันทึก</button>
                         </div>
                     </div>
                     <div class="input-group">
-                        <label style="font-size: 11px; color: #475569; display: block; margin-bottom: 4px;">🖼️ เปลี่ยนรูปโปรไฟล์</label>
-                        <input type="file" id="image-input" accept="image/*" style="font-size: 11px;">
+                        <label>🖼️ เปลี่ยนรูปโปรไฟล์</label>
+                        <input type="file" id="new-image-input" accept="image/*" style="font-size: 11px;">
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- คอนเทนเนอร์เนื้อหาหลัก (ตัดส่วนโปรไฟล์เดิมออกแล้ว) -->
     <main class="dashboard-container">
         <section class="grid-cards">
             <div class="card">
@@ -79,6 +283,60 @@
         </section>
     </main>
 
-    <script type="module" src="app.js?v=999999"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const avatarBtn = document.getElementById('profile-avatar-btn');
+            const popover = document.getElementById('profile-popover');
+            
+            const navImg = document.getElementById('nav-profile-img');
+            const popoverImg = document.getElementById('popover-profile-img');
+            const fileInput = document.getElementById('new-image-input');
+            
+            const displayUsername = document.getElementById('display-username');
+            const nameInput = document.getElementById('new-name-input');
+            const saveNameBtn = document.getElementById('btn-save-name');
+
+            // สลับการแสดง Popover UI เมื่อกดรูปโปรไฟล์
+            if (avatarBtn && popover) {
+                avatarBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    popover.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!popover.contains(e.target) && !avatarBtn.contains(e.target)) {
+                        popover.classList.add('hidden');
+                    }
+                });
+            }
+
+            // เปลี่ยนรูปภาพ
+            if (fileInput) {
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            navImg.src = evt.target.result;
+                            popoverImg.src = evt.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // บันทึกเปลี่ยนชื่อ
+            if (saveNameBtn && nameInput && displayUsername) {
+                saveNameBtn.addEventListener('click', () => {
+                    const val = nameInput.value.trim();
+                    if (val !== '') {
+                        displayUsername.textContent = val;
+                        nameInput.value = '';
+                        popover.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
