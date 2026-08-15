@@ -4,45 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUVA Learn Track</title>
-    <!-- นำเข้าฟอนต์ Kanit -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- อย่าลืมเปลี่ยนเลข ?v= ทุกครั้งที่แก้ไขโค้ดเพื่อล้างแคช -->
-    <link rel="stylesheet" href="style.css?v=2001">
+    <link rel="stylesheet" href="style.css?v=8888">
 </head>
 <body>
 
-    <!-- =========================================
-         พื้นที่ใส่ UI หลักของเว็บคุณ (วางไว้ตรงนี้ได้เลย)
-         ========================================= -->
-    <main class="main-content">
-        <header class="app-header">
-            <h1>📚 EDUVA Learn Track</h1>
-        </header>
+    <header class="navbar">
+        <div class="logo">📚 EDUVA Learn Track</div>
+    </header>
 
-        <section class="user-card">
-            <div class="profile-section">
-                <!-- ใส่รูปโปรไฟล์ของคุณ -->
+    <main class="dashboard-container">
+        
+        <section class="profile-card">
+            <div class="avatar-wrapper">
                 <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
-                <div class="user-info">
-                    <h2>puupy</h2>
-                    <p>student@email.com</p>
-                </div>
+            </div>
+            <h2 class="username">puupy</h2>
+            <p class="email">im1ssolddc@gmail.com</p>
+        </section>
+
+        <section class="grid-cards">
+            
+            <div class="card">
+                <h3>📖 วิชาที่กำลังเรียน</h3>
+                <ul>
+                    <li>Web Development (HTML/CSS/JS)</li>
+                    <li>Firebase Database Integration</li>
+                    <li>UI/UX Design Basics</li>
+                </ul>
             </div>
 
-            <!-- กล่องเป้าหมายประจำสัปดาห์ -->
-            <div class="goal-box">
-                <div class="goal-header">
-                    <span>📊 เป้าหมายสัปดาห์นี้</span>
-                    <span class="goal-percent">75%</span>
-                </div>
+            <div class="card">
+                <h3>✅ งานที่ต้องทำ (To-Do)</h3>
+                <ul>
+                    <li>อัปเดตระบบล็อกอิน Firebase</li>
+                    <li>จัดหน้าแดชบอร์ดให้สวยงาม</li>
+                    <li>ทดสอบระบบบนมือถือ</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>📊 เป้าหมายสัปดาห์นี้</h3>
+                <p>ความก้าวหน้า: <strong>75%</strong></p>
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: 75%;"></div>
                 </div>
             </div>
+
         </section>
+
     </main>
 
-    <!-- ดึงไฟล์ JS มาทำงาน -->
-    <script type="module" src="app.js?v=2001"></script>
+    <script type="module" src="app.js?v=8888"></script>
 </body>
 </html>
