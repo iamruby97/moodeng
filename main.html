@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile & Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
     <style>
         * { box-sizing: border-box; }
         
-        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -37,7 +36,6 @@
             padding: 0 15px;
         }
 
-        /* Profile Header Card */
         .profile-card {
             background: rgba(255, 255, 255, 0.96);
             border-radius: 16px;
@@ -80,7 +78,6 @@
             margin-top: 5px;
         }
 
-        /* Form Controls */
         .settings-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -100,9 +97,6 @@
             margin: 0 0 12px 0;
             color: #1e293b;
             font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .input-group {
@@ -117,37 +111,28 @@
             border-radius: 8px;
             font-size: 14px;
             outline: none;
-            transition: 0.2s;
         }
 
-        .input-field:focus {
-            border-color: #315efb;
-            box-shadow: 0 0 0 3px rgba(49, 94, 251, 0.15);
-        }
-
-        /* Presets Avatar Options */
         .preset-container {
             display: flex;
             gap: 10px;
             margin-bottom: 12px;
-            justify-content: flex-start;
         }
 
         .preset-avatar {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: all 0.2s ease;
+            transition: 0.2s;
             object-fit: cover;
             background: #fff;
         }
 
-        .preset-avatar:hover, .preset-avatar.active {
+        .preset-avatar:hover {
             border-color: #315efb;
             transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(49, 94, 251, 0.3);
         }
 
         .btn-action {
@@ -159,7 +144,6 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
-            transition: 0.2s;
         }
         .btn-action:hover { background-color: #1a44db; }
 
@@ -173,9 +157,7 @@
             font-weight: 600;
             font-size: 13px;
         }
-        .btn-logout:hover { background-color: #dc2626; }
 
-        /* Dashboard Items */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -188,64 +170,57 @@
             border-radius: 14px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-
-        .card h3 { margin-top: 0; color: #1e293b; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <!-- แถบ Navbar -->
     <nav class="navbar">
         <h2>📚 EDUVA Learn Track</h2>
         <div class="user-info">
-            <img id="navAvatar" class="avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" alt="Avatar">
+            <img id="navAvatar" class="avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Fallback'" alt="Avatar">
             <span id="userDisplayName" style="font-weight: 600; color: #1e293b;">กำลังโหลด...</span>
             <button id="logoutBtn" class="btn-logout">ออกจากระบบ</button>
         </div>
     </nav>
 
-    <!-- พื้นที่เนื้อหา -->
     <div class="container">
         
-        <!-- การ์ดโปรไฟล์ส่วนตัว -->
         <div class="profile-card">
             <div class="profile-banner"></div>
             
             <div class="avatar-large-container">
-                <img id="userAvatar" class="avatar-large" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" alt="Profile Picture">
+                <img id="userAvatar" class="avatar-large" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Fallback'" alt="Profile Picture">
             </div>
 
             <h2 style="margin: 10px 0 2px 0; color: #0f172a;" id="welcomeName">ผู้ใช้งาน</h2>
             <div><span class="email-badge" id="userEmail">กำลังโหลด...</span></div>
 
-            <!-- กล่องตั้งค่าโปรไฟล์ -->
             <div class="settings-grid">
                 
-                <!-- 1. เปลี่ยนชื่อ -->
                 <div class="settings-box">
                     <h4>✏️ ชื่อโปรไฟล์ (Display Name)</h4>
                     <div class="input-group">
                         <input type="text" id="displayNameInput" class="input-field" placeholder="กรอกชื่อของคุณ">
-                        <button id="saveProfileBtn" class="btn-action">บันทึก</button>
+                        <button id="saveProfileBtn" class="btn-action">บันทึกชื่อ</button>
                     </div>
                 </div>
 
-                <!-- 2. เปลี่ยนรูปโปรไฟล์ -->
                 <div class="settings-box">
-                    <h4>🖼️ รูปโปรไฟล์ (Avatar)</h4>
+                    <h4>🖼️ รูปโปรไฟล์ (Profile Avatar)</h4>
                     
-                    <!-- Presets เลือกรูปด่วน -->
-                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px;">เลือกรูปสำเร็จรูป:</div>
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px;">1. เลือกรูปการ์ตูนสำเร็จรูป:</div>
                     <div class="preset-container">
                         <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1')">
                         <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby')">
                         <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/lorelei/svg?seed=Star" onclick="selectPreset('https://api.dicebear.com/7.x/lorelei/svg?seed=Star')">
                         <img class="preset-avatar" src="https://api.dicebear.com/7.x/big-smile/svg?seed=Cool" onclick="selectPreset('https://api.dicebear.com/7.x/big-smile/svg?seed=Cool')">
                     </div>
 
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px; margin-top: 10px;">2. หรือเลือกรูปจากมือถือ/คอมพิวเตอร์:</div>
+                    <input type="file" id="fileInput" accept="image/*" class="input-field" style="background: white; margin-bottom: 10px; width: 100%;">
+
                     <div class="input-group">
-                        <input type="url" id="photoUrlInput" class="input-field" placeholder="หรือวาง URL รูปภาพ">
+                        <input type="url" id="photoUrlInput" class="input-field" placeholder="หรือวาง URL ลิงก์รูปตรง (.jpg, .png)">
                         <button id="savePhotoBtn" class="btn-action" style="background-color: #10b981;">บันทึกรูป</button>
                     </div>
                 </div>
@@ -255,7 +230,6 @@
             <p id="profileMsg" style="margin: 0 0 15px 0; font-size: 14px; font-weight: 600;"></p>
         </div>
 
-        <!-- การ์ดฟีเจอร์อื่นๆ -->
         <div class="grid">
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
@@ -286,6 +260,6 @@
 
     </div>
 
-    <script type="module" src="app.js?v=5"></script>
+    <script type="module" src="app.js?v=6"></script>
 </body>
 </html>
