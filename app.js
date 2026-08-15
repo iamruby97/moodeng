@@ -49,3 +49,5 @@ const createFloatingCredits = () => {
 // เรียกใช้งานเมื่อโหลดหน้าเว็บ
 document.addEventListener('DOMContentLoaded', createFloatingCredits);
 createFloatingCredits();
+// ล้างระบบให้กลับมาเป็นปกติ
+console.log("App ready");
