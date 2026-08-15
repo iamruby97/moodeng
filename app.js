@@ -23,165 +23,99 @@ const auth = getAuth(app);
 
 const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu";
 
-// เปลี่ยนรูปผ่าน Preset อัตโนมัติ
-window.selectPreset = async (avatarUrl) => {
-    const currentUser = auth.currentUser;
-    const profileMsg = document.getElementById('profileMsg');
-    
-    if (!currentUser) return;
-
-    try {
-        if (profileMsg) {
-            profileMsg.style.color = "#315efb";
-            profileMsg.textContent = "กำลังเปลี่ยนรูปโปรไฟล์...";
-        }
-
-        await updateProfile(currentUser, { photoURL: avatarUrl });
-
-        document.getElementById('navAvatar').src = avatarUrl;
-        document.getElementById('userAvatar').src = avatarUrl;
-        document.getElementById('photoUrlInput').value = avatarUrl;
-
-        if (profileMsg) {
-            profileMsg.style.color = "#10b981";
-            profileMsg.textContent = "อัปเดตรูปโปรไฟล์เรียบร้อย! ✨";
-        }
-    } catch (error) {
-        if (profileMsg) {
-            profileMsg.style.color = "#ef4444";
-            profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
-        }
-    }
-};
-
-// ตรวจสอบล็อกอิน
+// --- ตรวจสอบสถานะล็อกอินอัตโนมัติ (Auto Redirect) ---
 onAuthStateChanged(auth, (user) => {
-    const isMainPage = window.location.pathname.includes("main.html");
+    const currentPath = window.location.pathname.toLowerCase();
+    const isMainPage = currentPath.includes("main.html");
 
     if (user) {
+        // ถ้าระบบพบว่าล็อกอินอยู่แล้ว แต่อยู่หน้า index ให้เด้งไป main.html ทันที
         if (!isMainPage) {
-            window.location.href = "main.html";
+            window.location.href = "./main.html";
         } else {
+            // ดึงข้อมูลผู้ใช้แสดงผลใน main.html
             const displayName = user.displayName || user.email.split('@')[0];
             const avatarUrl = user.photoURL || defaultAvatar;
 
-            document.getElementById('userDisplayName').textContent = displayName;
-            document.getElementById('welcomeName').textContent = displayName;
-            document.getElementById('userEmail').textContent = user.email;
-            document.getElementById('navAvatar').src = avatarUrl;
-            document.getElementById('userAvatar').src = avatarUrl;
+            const userDisplayNameEl = document.getElementById('userDisplayName');
+            const welcomeNameEl = document.getElementById('welcomeName');
+            const userEmailEl = document.getElementById('userEmail');
+            const navAvatar = document.getElementById('navAvatar');
+            const userAvatar = document.getElementById('userAvatar');
 
-            if (!document.getElementById('displayNameInput').value && user.displayName) {
-                document.getElementById('displayNameInput').value = user.displayName;
-            }
-            if (!document.getElementById('photoUrlInput').value && user.photoURL) {
-                document.getElementById('photoUrlInput').value = user.photoURL;
-            }
+            if (userDisplayNameEl) userDisplayNameEl.textContent = displayName;
+            if (welcomeNameEl) welcomeNameEl.textContent = displayName;
+            if (userEmailEl) userEmailEl.textContent = user.email;
+            if (navAvatar) navAvatar.src = avatarUrl;
+            if (userAvatar) userAvatar.src = avatarUrl;
         }
     } else {
+        // ถ้าไม่ได้ล็อกอิน แต่อยู่หน้า main.html ให้เด้งกลับไป index.html
         if (isMainPage) {
-            window.location.href = "index.html";
+            window.location.href = "./index.html";
         }
     }
 });
 
-// บันทึกชื่อ
-const saveProfileBtn = document.getElementById('saveProfileBtn');
-const profileMsg = document.getElementById('profileMsg');
+// --- 1. สมัครสมาชิก ---
+const signupForm = document.getElementById('signupForm');
+const message = document.getElementById('message');
 
-if (saveProfileBtn) {
-    saveProfileBtn.addEventListener('click', async () => {
-        const newName = document.getElementById('displayNameInput').value.trim();
-        const currentUser = auth.currentUser;
+if (signupForm) {
+    signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-        if (!newName) {
-            profileMsg.style.color = "#ef4444";
-            profileMsg.textContent = "กรุณากรอกชื่อโปรไฟล์";
-            return;
-        }
-
-        if (currentUser) {
-            try {
-                saveProfileBtn.disabled = true;
-                saveProfileBtn.textContent = "กำลังบันทึก...";
-
-                await updateProfile(currentUser, { displayName: newName });
-
-                profileMsg.style.color = "#10b981";
-                profileMsg.textContent = "อัปเดตชื่อโปรไฟล์สำเร็จ! ✨";
-
-                document.getElementById('userDisplayName').textContent = newName;
-                document.getElementById('welcomeName').textContent = newName;
-
-            } catch (error) {
-                profileMsg.style.color = "#ef4444";
-                profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
-            } finally {
-                saveProfileBtn.disabled = false;
-                saveProfileBtn.textContent = "บันทึกชื่อ";
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            if (message) {
+                message.style.color = "green";
+                message.textContent = "สมัครสมาชิกสำเร็จ! 🎉 กำลังไปหน้าหลัก...";
+            }
+            setTimeout(() => { window.location.href = "./main.html"; }, 800);
+        } catch (error) {
+            if (message) {
+                message.style.color = "red";
+                message.textContent = "เกิดข้อผิดพลาด: " + error.message;
             }
         }
     });
 }
 
-// บันทึกรูปผ่าน Direct URL
-const savePhotoBtn = document.getElementById('savePhotoBtn');
+// --- 2. เข้าสู่ระบบ ---
+const loginForm = document.getElementById('loginForm');
+const loginMessage = document.getElementById('loginMessage');
 
-if (savePhotoBtn) {
-    savePhotoBtn.addEventListener('click', async () => {
-        const currentUser = auth.currentUser;
-        const photoUrlInput = document.getElementById('photoUrlInput');
-        const urlInputVal = photoUrlInput ? photoUrlInput.value.trim() : '';
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
 
-        if (!urlInputVal) {
-            profileMsg.style.color = "#ef4444";
-            profileMsg.textContent = "กรุณากรอก URL ลิงก์รูปภาพ";
-            return;
-        }
-
-        if (currentUser) {
-            try {
-                savePhotoBtn.disabled = true;
-                profileMsg.style.color = "#315efb";
-                profileMsg.textContent = "กำลังตรวจสอบรูปภาพ...";
-
-                // ตรวจสอบว่าเป็นไฟล์ภาพที่เปิดได้จริงหรือไม่
-                const testImg = new Image();
-                testImg.src = urlInputVal;
-
-                testImg.onload = async () => {
-                    await updateProfile(currentUser, { photoURL: urlInputVal });
-
-                    profileMsg.style.color = "#10b981";
-                    profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์สำเร็จ! 🖼️";
-
-                    document.getElementById('navAvatar').src = urlInputVal;
-                    document.getElementById('userAvatar').src = urlInputVal;
-                    savePhotoBtn.disabled = false;
-                };
-
-                testImg.onerror = () => {
-                    profileMsg.style.color = "#ef4444";
-                    profileMsg.textContent = "ลิงก์รูปนี้ไม่สามารถดึงรูปได้ (โดนล็อก CORS หรือไม่ใช่ไฟล์รูปตรงๆ)";
-                    savePhotoBtn.disabled = false;
-                };
-
-            } catch (error) {
-                profileMsg.style.color = "#ef4444";
-                profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
-                savePhotoBtn.disabled = false;
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            if (loginMessage) {
+                loginMessage.style.color = "green";
+                loginMessage.textContent = "เข้าสู่ระบบสำเร็จ! 🎉 กำลังย้ายหน้า...";
+            }
+            setTimeout(() => { window.location.href = "./main.html"; }, 800);
+        } catch (error) {
+            if (loginMessage) {
+                loginMessage.style.color = "red";
+                loginMessage.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
             }
         }
     });
 }
 
-// ออกจากระบบ
+// --- 3. ออกจากระบบ ---
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
         try {
             await signOut(auth);
-            window.location.href = "index.html";
+            window.location.href = "./index.html";
         } catch (error) {
             alert("เกิดข้อผิดพลาดในการออกจากระบบ");
         }
