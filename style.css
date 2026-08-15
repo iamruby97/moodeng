@@ -11,16 +11,15 @@ body {
     color: #333;
 }
 
-/* Navbar แบบจัดชิดซ้าย-ขวา */
 .navbar {
     width: 100%;
-    height: 60px;
-    padding: 0 24px;
+    height: 65px;
+    padding: 0 30px;
     background: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: relative;
     z-index: 100;
 }
@@ -31,80 +30,90 @@ body {
     color: #1a73e8;
 }
 
-/* ส่วนจัดวางโปรไฟล์ขวาบนสุด */
+/* ปุ่มโปรไฟล์กลมๆ */
 .user-profile-wrapper {
     position: relative;
 }
 
-.profile-card-top {
+.profile-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: #f8fafc;
-    padding: 4px 12px 4px 6px;
-    border-radius: 30px;
-    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.profile-btn:hover {
+    transform: scale(1.08);
 }
 
 .user-avatar {
-    width: 36px !important;
-    height: 36px !important;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #1a73e8;
 }
 
-.user-info {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.username {
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.1;
-    color: #1e293b;
-}
-
-.email {
-    font-size: 10px;
-    color: #64748b;
-}
-
-.settings-btn {
-    background: none;
-    border: none;
-    font-size: 15px;
-    cursor: pointer;
-    padding: 2px 4px;
-    border-radius: 50%;
-    transition: transform 0.2s ease;
-}
-
-.settings-btn:hover {
-    transform: rotate(45deg);
-}
-
-/* เมนูป๊อปอัพตั้งค่า */
-.settings-dropdown {
+/* UI ป๊อปอัพเมนูที่เด้งลงมา */
+.profile-dropdown {
     position: absolute;
-    top: 48px;
+    top: 55px;
     right: 0;
-    width: 250px;
+    width: 270px;
     background: #ffffff;
-    padding: 14px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
     border: 1px solid #e2e8f0;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     z-index: 1000;
 }
 
 .hidden {
     display: none !important;
+}
+
+.dropdown-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dropdown-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.2;
+}
+
+.user-info p {
+    font-size: 11px;
+    color: #64748b;
+    word-break: break-all;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #f1f5f9;
+}
+
+.dropdown-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .input-group {
@@ -122,7 +131,7 @@ body {
 
 .input-inline input {
     flex: 1;
-    padding: 5px 8px;
+    padding: 6px 10px;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
     font-size: 12px;
@@ -130,7 +139,7 @@ body {
 }
 
 .input-inline button {
-    padding: 5px 10px;
+    padding: 6px 12px;
     background: #1a73e8;
     color: white;
     border: none;
@@ -143,18 +152,11 @@ body {
     font-size: 11px;
 }
 
-/* คอนเทนเนอร์เนื้อหาหลักตรงกลาง */
+/* เนื้อหาหลัก */
 .dashboard-container {
     max-width: 900px;
     margin: 50px auto;
     padding: 0 20px;
-}
-
-/* ป้องกันไม่ให้ Profile เดิมที่เรนเดอร์ผ่าน JS ค้างตรงกลาง */
-.dashboard-container > .user-card,
-.dashboard-container > .profile-card,
-.dashboard-container > div:first-child:not(.grid-cards) {
-    display: none !important;
 }
 
 .grid-cards {
