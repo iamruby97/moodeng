@@ -8,7 +8,7 @@ import {
     updateProfile 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Firebase Configuration
+// Firebase Configuration (ห้ามแก้ส่วนนี้)
 const firebaseConfig = {
   apiKey: "AIzaSyB7nVG0DU8vI_yby6kWZ_4N0tKYBJI0pQw",
   authDomain: "moodeng-aa11a.firebaseapp.com",
@@ -23,12 +23,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu";
+const profileMsg = document.getElementById('profileMsg');
 
 // --- เลือก Preset Avatar (การ์ตูน) ---
 window.selectPreset = async (avatarUrl) => {
     const currentUser = auth.currentUser;
-    const profileMsg = document.getElementById('profileMsg');
-    
     if (!currentUser) return;
 
     try {
@@ -159,7 +158,6 @@ if (logoutBtn) {
 
 // --- 4. บันทึกชื่อโปรไฟล์ ---
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-const profileMsg = document.getElementById('profileMsg');
 
 if (saveProfileBtn) {
     saveProfileBtn.addEventListener('click', async () => {
@@ -204,7 +202,7 @@ if (saveProfileBtn) {
     });
 }
 
-// --- 5. ระบบบีบอัดภาพและอัปโหลดจากมือถือ/คอมพิวเตอร์ ---
+// --- 5. อัปโหลดรูปภาพขึ้น Cloud (ImgBB) และนำ URL มาบันทึกใน Firebase ---
 const fileInput = document.getElementById('fileInput');
 
 if (fileInput) {
@@ -217,67 +215,49 @@ if (fileInput) {
         try {
             if (profileMsg) {
                 profileMsg.style.color = "#315efb";
-                profileMsg.textContent = "กำลังบีบอัดรูปภาพ...";
+                profileMsg.textContent = "กำลังอัปโหลดรูปภาพขึ้นระบบ... (รอสักครู่)";
             }
 
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const img = new Image();
-                img.onload = async () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // ปรับขนาดความกว้าง/ยาวของรูป
-                    const size = 48;
-                    canvas.width = size;
-                    canvas.height = size;
-                    ctx.drawImage(img, 0, 0, size, size);
-                    
-                    // ระบบลดคุณภาพอัตโนมัติจนกว่าความยาวตัวอักษรจะน้อยกว่า 2000 ตัว
-                    let quality = 0.4;
-                    let compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            // ส่งไฟล์รูปไปฝากที่ ImgBB API
+            const formData = new FormData();
+            formData.append("image", file);
 
-                    while (compressedBase64.length > 2000 && quality > 0.05) {
-                        quality -= 0.05;
-                        compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-                    }
+            const response = await fetch("https://api.imgbb.com/1/upload?key=6d257f2c4d0c3702d4a7065be00fc779", {
+                method: "POST",
+                body: formData
+            });
 
-                    if (compressedBase64.length > 2000) {
-                        if (profileMsg) {
-                            profileMsg.style.color = "#ef4444";
-                            profileMsg.textContent = "รูปภาพนี้มีความซับซ้อนสูงเกินไป กรุณาเลือกรูปอื่น";
-                        }
-                        return;
-                    }
+            const result = await response.json();
 
-                    try {
-                        await updateProfile(currentUser, { photoURL: compressedBase64 });
+            if (result.success) {
+                // ได้ลิงก์ URL สั้นๆ กลับมา
+                const imageUrl = result.data.url; 
 
-                        const navAvatar = document.getElementById('navAvatar');
-                        const userAvatar = document.getElementById('userAvatar');
-                        if (navAvatar) navAvatar.src = compressedBase64;
-                        if (userAvatar) userAvatar.src = compressedBase64;
+                // นำ URL สั้นๆ ไปบันทึกลง Firebase
+                await updateProfile(currentUser, { photoURL: imageUrl });
 
-                        if (profileMsg) {
-                            profileMsg.style.color = "#10b981";
-                            profileMsg.textContent = "อัปเดตรูปโปรไฟล์สำเร็จ! 📸";
-                        }
-                    } catch (err) {
-                        if (profileMsg) {
-                            profileMsg.style.color = "#ef4444";
-                            profileMsg.textContent = "เกิดข้อผิดพลาดในการบันทึก: " + err.message;
-                        }
-                    }
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
+                // อัปเดตแสดงผลหน้าเว็บ
+                const navAvatar = document.getElementById('navAvatar');
+                const userAvatar = document.getElementById('userAvatar');
+                if (navAvatar) navAvatar.src = imageUrl;
+                if (userAvatar) userAvatar.src = imageUrl;
+
+                if (profileMsg) {
+                    profileMsg.style.color = "#10b981";
+                    profileMsg.textContent = "อัปเดตรูปโปรไฟล์สำเร็จ! 📸";
+                }
+            } else {
+                throw new Error("ไม่สามารถอัปโหลดรูปภาพได้");
+            }
 
         } catch (error) {
             if (profileMsg) {
                 profileMsg.style.color = "#ef4444";
                 profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
             }
+        } finally {
+            // ล้างค่า input เพื่อให้สามารถเลือกรูปเดิมซ้ำได้ในครั้งต่อไป
+            e.target.value = '';
         }
     });
 }
