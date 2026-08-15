@@ -21,17 +21,40 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng";
+const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu";
 
-// ฟังก์ชันเลือกรูป Preset
-window.selectPreset = (url) => {
-    const photoUrlInput = document.getElementById('photoUrlInput');
-    if (photoUrlInput) {
-        photoUrlInput.value = url;
+// เปลี่ยนรูปผ่าน Preset อัตโนมัติ
+window.selectPreset = async (avatarUrl) => {
+    const currentUser = auth.currentUser;
+    const profileMsg = document.getElementById('profileMsg');
+    
+    if (!currentUser) return;
+
+    try {
+        if (profileMsg) {
+            profileMsg.style.color = "#315efb";
+            profileMsg.textContent = "กำลังเปลี่ยนรูปโปรไฟล์...";
+        }
+
+        await updateProfile(currentUser, { photoURL: avatarUrl });
+
+        document.getElementById('navAvatar').src = avatarUrl;
+        document.getElementById('userAvatar').src = avatarUrl;
+        document.getElementById('photoUrlInput').value = avatarUrl;
+
+        if (profileMsg) {
+            profileMsg.style.color = "#10b981";
+            profileMsg.textContent = "อัปเดตรูปโปรไฟล์เรียบร้อย! ✨";
+        }
+    } catch (error) {
+        if (profileMsg) {
+            profileMsg.style.color = "#ef4444";
+            profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
+        }
     }
 };
 
-// --- ตรวจสอบสถานะการล็อกอินอัตโนมัติ ---
+// ตรวจสอบล็อกอิน
 onAuthStateChanged(auth, (user) => {
     const isMainPage = window.location.pathname.includes("main.html");
 
@@ -42,25 +65,17 @@ onAuthStateChanged(auth, (user) => {
             const displayName = user.displayName || user.email.split('@')[0];
             const avatarUrl = user.photoURL || defaultAvatar;
 
-            const userDisplayNameEl = document.getElementById('userDisplayName');
-            const welcomeNameEl = document.getElementById('welcomeName');
-            const userEmailEl = document.getElementById('userEmail');
-            const displayNameInput = document.getElementById('displayNameInput');
-            const photoUrlInput = document.getElementById('photoUrlInput');
-            const navAvatar = document.getElementById('navAvatar');
-            const userAvatar = document.getElementById('userAvatar');
+            document.getElementById('userDisplayName').textContent = displayName;
+            document.getElementById('welcomeName').textContent = displayName;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('navAvatar').src = avatarUrl;
+            document.getElementById('userAvatar').src = avatarUrl;
 
-            if (userDisplayNameEl) userDisplayNameEl.textContent = displayName;
-            if (welcomeNameEl) welcomeNameEl.textContent = displayName;
-            if (userEmailEl) userEmailEl.textContent = user.email;
-            if (navAvatar) navAvatar.src = avatarUrl;
-            if (userAvatar) userAvatar.src = avatarUrl;
-
-            if (displayNameInput && !displayNameInput.value && user.displayName) {
-                displayNameInput.value = user.displayName;
+            if (!document.getElementById('displayNameInput').value && user.displayName) {
+                document.getElementById('displayNameInput').value = user.displayName;
             }
-            if (photoUrlInput && !photoUrlInput.value && user.photoURL && !user.photoURL.startsWith('data:')) {
-                photoUrlInput.value = user.photoURL;
+            if (!document.getElementById('photoUrlInput').value && user.photoURL) {
+                document.getElementById('photoUrlInput').value = user.photoURL;
             }
         }
     } else {
@@ -70,64 +85,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// --- 1. สมัครสมาชิก ---
-const signupForm = document.getElementById('signupForm');
-const message = document.getElementById('message');
-
-if (signupForm) {
-    signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            message.style.color = "green";
-            message.textContent = "สมัครสมาชิกสำเร็จ! 🎉 กำลังพาไปหน้าหลัก...";
-            setTimeout(() => { window.location.href = "main.html"; }, 1000);
-        } catch (error) {
-            message.style.color = "red";
-            message.textContent = "เกิดข้อผิดพลาด: " + error.message;
-        }
-    });
-}
-
-// --- 2. เข้าสู่ระบบ ---
-const loginForm = document.getElementById('loginForm');
-const loginMessage = document.getElementById('loginMessage');
-
-if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            loginMessage.style.color = "green";
-            loginMessage.textContent = "เข้าสู่ระบบสำเร็จ! 🎉";
-            setTimeout(() => { window.location.href = "main.html"; }, 1000);
-        } catch (error) {
-            loginMessage.style.color = "red";
-            loginMessage.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
-        }
-    });
-}
-
-// --- 3. ออกจากระบบ ---
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-        try {
-            await signOut(auth);
-            window.location.href = "index.html";
-        } catch (error) {
-            alert("เกิดข้อผิดพลาดในการออกจากระบบ");
-        }
-    });
-}
-
-// --- 4. บันทึกชื่อโปรไฟล์ ---
+// บันทึกชื่อ
 const saveProfileBtn = document.getElementById('saveProfileBtn');
 const profileMsg = document.getElementById('profileMsg');
 
@@ -152,10 +110,8 @@ if (saveProfileBtn) {
                 profileMsg.style.color = "#10b981";
                 profileMsg.textContent = "อัปเดตชื่อโปรไฟล์สำเร็จ! ✨";
 
-                const userDisplayNameEl = document.getElementById('userDisplayName');
-                const welcomeNameEl = document.getElementById('welcomeName');
-                if (userDisplayNameEl) userDisplayNameEl.textContent = newName;
-                if (welcomeNameEl) welcomeNameEl.textContent = newName;
+                document.getElementById('userDisplayName').textContent = newName;
+                document.getElementById('welcomeName').textContent = newName;
 
             } catch (error) {
                 profileMsg.style.color = "#ef4444";
@@ -168,76 +124,66 @@ if (saveProfileBtn) {
     });
 }
 
-// --- 5. บันทึกรูปโปรไฟล์ (รองรับทั้งไฟล์จากเครื่อง และ URL) ---
+// บันทึกรูปผ่าน Direct URL
 const savePhotoBtn = document.getElementById('savePhotoBtn');
-const fileInput = document.getElementById('fileInput');
 
 if (savePhotoBtn) {
     savePhotoBtn.addEventListener('click', async () => {
         const currentUser = auth.currentUser;
-        if (!currentUser) return;
+        const photoUrlInput = document.getElementById('photoUrlInput');
+        const urlInputVal = photoUrlInput ? photoUrlInput.value.trim() : '';
 
-        const urlInputVal = document.getElementById('photoUrlInput').value.trim();
-        const selectedFile = fileInput && fileInput.files[0];
-
-        if (!selectedFile && !urlInputVal) {
+        if (!urlInputVal) {
             profileMsg.style.color = "#ef4444";
-            profileMsg.textContent = "กรุณเลือกไฟล์รูป หรือกรอก URL รูปภาพ";
+            profileMsg.textContent = "กรุณากรอก URL ลิงก์รูปภาพ";
             return;
         }
 
-        profileMsg.style.color = "#315efb";
-        profileMsg.textContent = "กำลังประมวลผลรูปภาพ...";
-        savePhotoBtn.disabled = true;
-
-        // กรณีอัปโหลดไฟล์จากเครื่อง (ย่อขนาดรูปเป็น Base64)
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = async () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = 100;
-                    canvas.height = 100;
-                    ctx.drawImage(img, 0, 0, 100, 100);
-                    
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
-                    try {
-                        await updateProfile(currentUser, { photoURL: compressedBase64 });
-                        profileMsg.style.color = "#10b981";
-                        profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์จากไฟล์สำเร็จ! 🖼️";
-
-                        document.getElementById('navAvatar').src = compressedBase64;
-                        document.getElementById('userAvatar').src = compressedBase64;
-                        fileInput.value = ""; // เคลียร์ไฟล์
-                    } catch (err) {
-                        profileMsg.style.color = "#ef4444";
-                        profileMsg.textContent = "เกิดข้อผิดพลาดในการบันทึกรูปภาพ";
-                    } finally {
-                        savePhotoBtn.disabled = false;
-                    }
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(selectedFile);
-        } 
-        // กรณีใส่ URL ลิงก์รูปภาพ
-        else if (urlInputVal) {
+        if (currentUser) {
             try {
-                await updateProfile(currentUser, { photoURL: urlInputVal });
-                profileMsg.style.color = "#10b981";
-                profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์จาก URL สำเร็จ! 🖼️";
+                savePhotoBtn.disabled = true;
+                profileMsg.style.color = "#315efb";
+                profileMsg.textContent = "กำลังตรวจสอบรูปภาพ...";
 
-                document.getElementById('navAvatar').src = urlInputVal;
-                document.getElementById('userAvatar').src = urlInputVal;
+                // ตรวจสอบว่าเป็นไฟล์ภาพที่เปิดได้จริงหรือไม่
+                const testImg = new Image();
+                testImg.src = urlInputVal;
+
+                testImg.onload = async () => {
+                    await updateProfile(currentUser, { photoURL: urlInputVal });
+
+                    profileMsg.style.color = "#10b981";
+                    profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์สำเร็จ! 🖼️";
+
+                    document.getElementById('navAvatar').src = urlInputVal;
+                    document.getElementById('userAvatar').src = urlInputVal;
+                    savePhotoBtn.disabled = false;
+                };
+
+                testImg.onerror = () => {
+                    profileMsg.style.color = "#ef4444";
+                    profileMsg.textContent = "ลิงก์รูปนี้ไม่สามารถดึงรูปได้ (โดนล็อก CORS หรือไม่ใช่ไฟล์รูปตรงๆ)";
+                    savePhotoBtn.disabled = false;
+                };
+
             } catch (error) {
                 profileMsg.style.color = "#ef4444";
-                profileMsg.textContent = "ลิงก์รูปภาพไม่ถูกต้อง หรือเกิดข้อผิดพลาด";
-            } finally {
+                profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
                 savePhotoBtn.disabled = false;
             }
+        }
+    });
+}
+
+// ออกจากระบบ
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            await signOut(auth);
+            window.location.href = "index.html";
+        } catch (error) {
+            alert("เกิดข้อผิดพลาดในการออกจากระบบ");
         }
     });
 }
