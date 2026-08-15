@@ -273,3 +273,30 @@ const createCursorGlow = () => {
 
 // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเว็บ
 createCursorGlow();
+// --- 8. สร้างพื้นหลัง 3D (Floating 3D Cubes) อัตโนมัติ ---
+const create3DBackground = () => {
+    // ตรวจสอบว่ามีพื้นหลังอยู่แล้วหรือไม่ (กันมันสร้างซ้ำ)
+    if (document.querySelector('.bg-3d-area')) return;
+
+    // สร้างกล่องหลักครอบพื้นหลัง
+    const bgArea = document.createElement('div');
+    bgArea.className = 'bg-3d-area';
+
+    // สร้าง ul สำหรับใส่กล่อง 3D
+    const ul = document.createElement('ul');
+    ul.className = 'bg-3d-cubes';
+
+    // ใส่กล่องเข้าไป 10 ใบ
+    for (let i = 0; i < 10; i++) {
+        const li = document.createElement('li');
+        ul.appendChild(li);
+    }
+
+    bgArea.appendChild(ul);
+    
+    // แทรกพื้นหลังนี้เข้าไปเป็นส่วนแรกสุดของ body
+    document.body.insertBefore(bgArea, document.body.firstChild);
+};
+
+// เรียกใช้งานฟังก์ชัน
+create3DBackground();
