@@ -1,32 +1,12 @@
 // =========================================
-// 1. สร้างระบบพื้นหลัง 3D
-// =========================================
-const create3DBackground = () => {
-    if (document.querySelector('.bg-3d-area')) return;
-
-    const bgArea = document.createElement('div');
-    bgArea.className = 'bg-3d-area';
-
-    const ul = document.createElement('ul');
-    ul.className = 'bg-3d-cubes';
-    for (let i = 0; i < 10; i++) {
-        const li = document.createElement('li');
-        ul.appendChild(li);
-    }
-
-    bgArea.appendChild(ul);
-    document.body.insertBefore(bgArea, document.body.firstChild);
-};
-
-// =========================================
-// 2. สร้างป้าย IG เครดิตลอย
+// ฟังก์ชันสร้างป้าย IG เครดิตลอยช้าๆ
 // =========================================
 const createFloatingCredits = () => {
     if (document.getElementById('floating-credits')) return;
 
-    // ✏️ ใส่ชื่อ IG และ ลิงก์รูปโปรไฟล์ของคุณได้เลย
+    // ✏️ ใส่ชื่อ IG และ รูปโปรไฟล์ของคุณตรงนี้
     const igUsername = "iamruby97"; 
-    const profileImgUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"; 
+    const profileImgUrl = "https://cdn-icons-png.flaticon.com/512/2111/2111463.png"; 
 
     const credits = document.createElement('div');
     credits.id = 'floating-credits';
@@ -38,7 +18,7 @@ const createFloatingCredits = () => {
     `;
 
     credits.style.position = 'fixed';
-    credits.style.zIndex = '999';
+    credits.style.zIndex = '9999';
     credits.style.pointerEvents = 'none';
     credits.style.userSelect = 'none';
     document.body.appendChild(credits);
@@ -66,12 +46,6 @@ const createFloatingCredits = () => {
     animateCredits();
 };
 
-// =========================================
-// 3. ทำงานเมื่อเปิดหน้าเว็บ
-// =========================================
-document.addEventListener('DOMContentLoaded', () => {
-    create3DBackground();
-    createFloatingCredits();
-});
-create3DBackground();
+// เรียกใช้งานเมื่อโหลดหน้าเว็บ
+document.addEventListener('DOMContentLoaded', createFloatingCredits);
 createFloatingCredits();
