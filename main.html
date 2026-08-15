@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile & Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 
+    <!-- แถบ Navbar -->
     <nav class="navbar">
         <h2>📚 EDUVA Learn Track</h2>
         <div class="user-info">
@@ -17,8 +18,10 @@
         </div>
     </nav>
 
+    <!-- พื้นที่เนื้อหาหลัก -->
     <div class="container">
         
+        <!-- การ์ดโปรไฟล์ -->
         <div class="profile-card">
             <div class="profile-banner"></div>
             
@@ -29,8 +32,10 @@
             <h2 style="margin: 10px 0 2px 0; color: #0f172a;" id="welcomeName">ผู้ใช้งาน</h2>
             <div><span class="email-badge" id="userEmail">กำลังโหลด...</span></div>
 
+            <!-- กล่องตั้งค่าโปรไฟล์ -->
             <div class="settings-grid">
                 
+                <!-- 1. เปลี่ยนชื่อ -->
                 <div class="settings-box">
                     <h4>✏️ เปลี่ยนชื่อโปรไฟล์ (Display Name)</h4>
                     <div class="input-group">
@@ -39,6 +44,7 @@
                     </div>
                 </div>
 
+                <!-- 2. เลือก/อัปโหลดรูปโปรไฟล์ -->
                 <div class="settings-box">
                     <h4>🖼️ รูปโปรไฟล์ (Profile Picture)</h4>
                     
@@ -64,6 +70,7 @@
             <p id="profileMsg" class="msg-box" style="margin-bottom: 15px;"></p>
         </div>
 
+        <!-- การ์ดฟีเจอร์ แดชบอร์ด -->
         <div class="grid">
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
@@ -94,6 +101,6 @@
 
     </div>
 
-    <script type="module" src="app.js?v=11"></script>
+    <script type="module" src="app.js?v=12"></script>
 </body>
 </html>
