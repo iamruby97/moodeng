@@ -3,21 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าแรก - เว็บไซต์ของฉัน</title>
+    <title>EDUVA Learn Track</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: #e0e0e0; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        .tab-btn.active { background: #315efb; color: white; }
+        .form-box { display: none; }
+        .form-box.active { display: block; }
+    </style>
 </head>
 <body>
+    <div class="login-box" style="max-width: 400px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        
+        <!-- ปุ่มสลับแท็บ Login / Signup -->
+        <div class="tab-container">
+            <button id="loginTabBtn" class="tab-btn active" onclick="switchTab('login')">เข้าสู่ระบบ</button>
+            <button id="signupTabBtn" class="tab-btn" onclick="switchTab('signup')">สมัครสมาชิก</button>
+        </div>
 
-    <header style="display: flex; justify-content: flex-end; padding: 20px; gap: 10px;">
-        <a href="login.html" style="padding: 10px 20px; background-color: #315efb; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">เข้าสู่ระบบ (Sign In)</a>
-        <a href="signup.html" style="padding: 10px 20px; background-color: #e0e0e0; color: #333; text-decoration: none; border-radius: 6px; font-weight: bold;">สมัครสมาชิก (Sign Up)</a>
-    </header>
+        <!-- 1. ฟอร์มเข้าสู่ระบบ -->
+        <div id="loginSection" class="form-box active">
+            <h2>เข้าสู่ระบบ</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="อีเมล" required style="width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box;">
+                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required style="width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box;">
+                <button type="submit" style="width: 100%; padding: 10px; background-color: #315efb; color: white; border: none; border-radius: 5px; cursor: pointer;">เข้าสู่ระบบ</button>
+            </form>
+            <p id="loginMessage" style="margin-top: 15px;"></p>
+        </div>
 
-    <main style="text-align: center; margin-top: 50px;">
-        <h1>ยินดีต้อนรับสู่เว็บไซต์ของเรา! 🚀</h1>
-        <p>เลือกกดปุ่มด้านบนขวาเพื่อเข้าสู่ระบบหรือสมัครสมาชิกได้เลย</p>
-    </main>
+        <!-- 2. ฟอร์มสมัครสมาชิก -->
+        <div id="signupSection" class="form-box">
+            <h2>สมัครสมาชิก</h2>
+            <form id="signupForm">
+                <input type="email" id="email" placeholder="อีเมล" required style="width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box;">
+                <input type="password" id="password" placeholder="รหัสผ่าน (6 ตัวขึ้นไป)" required style="width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box;">
+                <button type="submit" style="width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">สมัครสมาชิก</button>
+            </form>
+            <p id="message" style="margin-top: 15px;"></p>
+        </div>
 
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const loginSection = document.getElementById('loginSection');
+            const signupSection = document.getElementById('signupSection');
+            const loginBtn = document.getElementById('loginTabBtn');
+            const signupBtn = document.getElementById('signupTabBtn');
+
+            if (tab === 'login') {
+                loginSection.classList.add('active');
+                signupSection.classList.remove('active');
+                loginBtn.classList.add('active');
+                signupBtn.classList.remove('active');
+            } else {
+                signupSection.classList.add('active');
+                loginSection.classList.remove('active');
+                signupBtn.classList.add('active');
+                loginBtn.classList.remove('active');
+            }
+        }
+    </script>
     <script type="module" src="app.js"></script>
 </body>
 </html>
