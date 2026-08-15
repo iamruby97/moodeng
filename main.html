@@ -5,31 +5,251 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUVA Learn Track</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- ใส่ ?v=999 เพื่อบังคับล้างแคช -->
-    <link rel="stylesheet" href="style.css?v=999">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            background-color: #0a192f;
+        }
+
+        /* Canvas พื้นหลัง 3D */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        /* Navbar ด้านบน */
+        .navbar {
+            width: 100%;
+            height: 65px;
+            padding: 0 30px;
+            background: rgba(10, 25, 47, 0.75);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 18px;
+            color: #00c6ff;
+        }
+
+        .profile-wrapper {
+            position: relative;
+        }
+
+        .avatar-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            outline: none;
+        }
+
+        .avatar-btn img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #0072ff;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar-btn img:hover {
+            transform: scale(1.08);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            width: 260px;
+            background: #0f2b48;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 198, 255, 0.2);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .dropdown-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dropdown-header img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: #8892b0;
+            word-break: break-all;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            color: #8892b0;
+        }
+
+        .input-inline {
+            display: flex;
+            gap: 6px;
+        }
+
+        .input-inline input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid rgba(0, 198, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .input-inline button {
+            padding: 6px 10px;
+            background: #0072ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .dashboard-container {
+            max-width: 900px;
+            margin: 80px auto 50px auto;
+            padding: 0 20px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(15, 43, 72, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 198, 255, 0.25);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #00c6ff;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            font-size: 14px;
+            color: #ccd6f6;
+            line-height: 1.8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0072ff, #00c6ff);
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- แถบด้านบน -->
+    <!-- Canvas แสดงผล 3D -->
+    <canvas id="bg-canvas"></canvas>
+
     <header class="navbar">
         <div class="logo">📚 EDUVA Learn Track</div>
+
+        <div class="profile-wrapper">
+            <button id="avatar-btn" class="avatar-btn">
+                <img id="nav-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+            </button>
+
+            <div id="profile-dropdown" class="profile-dropdown hidden">
+                <div class="dropdown-header">
+                    <img id="menu-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                    <div class="user-info">
+                        <h4 id="user-name">puupy</h4>
+                        <p id="user-email">im1ssolddc@gmail.com</p>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <div class="input-group">
+                    <label>✏️ เปลี่ยนชื่อโปรไฟล์</label>
+                    <div class="input-inline">
+                        <input type="text" id="name-input" placeholder="กรอกชื่อใหม่">
+                        <button id="save-name-btn">บันทึก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <!-- คอนเทนเนอร์หลัก -->
     <main class="dashboard-container">
-        
-        <!-- ส่วนโปรไฟล์ตรงกลาง -->
-        <section class="profile-card">
-            <div class="avatar-wrapper">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
-            </div>
-            <h2 class="username">puupy</h2>
-            <p class="email">im1ssolddc@gmail.com</p>
-        </section>
-
-        <!-- การ์ด 3 ช่องด้านล่าง -->
         <section class="grid-cards">
-            
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
                 <ul>
@@ -55,11 +275,97 @@
                     <div class="progress-fill" style="width: 75%;"></div>
                 </div>
             </div>
-
         </section>
-
     </main>
 
+    <!-- ไลบรารี Three.js สำหรับสร้าง 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // --- ระบบ 3D Background สี่เหลี่ยมสีน้ำเงินหมุนตามเมาส์ ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // สร้างกล่องสี่เหลี่ยม 3D
+        const geometry = new THREE.BoxGeometry(2.2, 2.2, 2.2);
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x0072ff,
+            shininess: 100
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // เพิ่มแสงสว่างให้วัตถุ 3D
+        const light = new THREE.DirectionalLight(0x00c6ff, 1.5);
+        light.position.set(5, 5, 5);
+        scene.add(light);
+
+        const ambientLight = new THREE.AmbientLight(0x0a192f, 2);
+        scene.add(ambientLight);
+
+        camera.position.z = 5;
+
+        // ดักจับตำแหน่งเมาส์
+        let mouseX = 0;
+        let mouseY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // ขยับลูกบาศก์ตามการเคลื่อนไหวของเมาส์
+            const targetX = mouseX * 0.001;
+            const targetY = mouseY * 0.001;
+            cube.rotation.y += 0.05 * (targetX - cube.rotation.y);
+            cube.rotation.x += 0.05 * (targetY - cube.rotation.x);
+            cube.rotation.z += 0.003;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- ระบบเปิดปิด Dropdown โปรไฟล์ ---
+        const avatarBtn = document.getElementById('avatar-btn');
+        const dropdown = document.getElementById('profile-dropdown');
+        const userName = document.getElementById('user-name');
+        const nameInput = document.getElementById('name-input');
+        const saveNameBtn = document.getElementById('save-name-btn');
+
+        avatarBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        saveNameBtn.addEventListener('click', () => {
+            const val = nameInput.value.trim();
+            if (val !== '') {
+                userName.textContent = val;
+                nameInput.value = '';
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
     <script type="module" src="app.js?v=999"></script>
 </body>
 </html>
