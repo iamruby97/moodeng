@@ -34,134 +34,92 @@ body { margin: 0; padding: 0; background-color: #f8fafc; color: #334155; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
 .card { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
 /* =========================================
-   พื้นหลังป่าธรรมชาติ (Nature Forest Theme) - อัปเกรดป่าลึก 🌲
+   พื้นหลังป่าสมจริงอลังการ (Realistic Forest Theme)
    ========================================= */
 .nature-bg {
     position: fixed;
     top: 0;
     left: 0;
-    width: 1000vw;
-    height: 1000vh;
+    width: 100vw;
+    height: 100vh;
     z-index: -2;
-    /* ปรับสีท้องฟ้าให้ดูเป็นป่าลึกและร่มรื่นขึ้น */
-    background: linear-gradient(to bottom, #b2ebf2 0%, #4db6ac 100%); 
     overflow: hidden;
+    /* ใช้ภาพป่าสมจริงเป็นพื้นหลัง */
+    background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
 }
 
-/* เนินหญ้าด้านหลัง (เพิ่มมิติให้ป่าดูทึบ) */
-.nature-hill-back {
+/* บ่อน้ำสมจริง (ใช้การไล่สีให้ดูมีมิติน้ำลึก) */
+.realistic-pond {
     position: absolute;
     bottom: 5vh;
-    left: -20vw;
-    width: 150vw;
-    height: 60vh;
-    background: #66bb6a;
-    border-radius: 50% 50% 0 0;
-    opacity: 0.8;
-}
-
-/* เนินหญ้าด้านหน้า */
-.nature-hill {
-    position: absolute;
-    bottom: -25vh;
-    left: -10vw;
-    width: 120vw;
-    height: 50vh;
-    background: #4caf50; /* สีเขียวเข้มขึ้น */
-    border-radius: 50% 50% 0 0;
-    box-shadow: inset 0 20px 50px rgba(0,0,0,0.2);
-}
-
-/* บ่อน้ำ (ขยายใหญ่ขึ้นมาก) */
-.nature-pond {
-    position: absolute;
-    bottom: 6vh; 
     left: 50%;
     transform: translateX(-50%);
-    width: 600px; /* ขยายความกว้าง */
-    height: 160px; /* ขยายความสูง */
-    background: #29b6f6;
+    width: 60vw;
+    max-width: 800px;
+    height: 18vh;
+    background: radial-gradient(ellipse at center, rgba(66, 165, 245, 0.6) 0%, rgba(38, 198, 218, 0.4) 70%, transparent 100%);
     border-radius: 50%;
-    border: 8px solid #26c6da;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+    box-shadow: inset 0 -10px 40px rgba(0,0,0,0.5);
+    z-index: 1;
 }
 
-/* ต้นไม้ใหญ่ 2 ฝั่ง (ใหญ่ขึ้นอีกนิด) */
-.nature-tree {
+/* ต้นไม้ใหญ่อลังการ */
+.realistic-tree {
     position: absolute;
-    bottom: 8vh;
-    font-size: 320px; 
-    line-height: 1;
-    filter: drop-shadow(0 20px 15px rgba(0,0,0,0.4));
+    bottom: -5vh;
+    width: 45vw; /* ขนาดใหญ่มาก */
+    max-width: 700px;
+    height: 100vh;
+    /* ใช้รูปต้นไม้จริงแบบไม่มีพื้นหลัง */
+    background-image: url('https://cdn.pixabay.com/photo/2014/12/21/23/56/tree-576575_960_720.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    z-index: 2;
+    pointer-events: none;
+    filter: drop-shadow(15px 10px 20px rgba(0,0,0,0.6));
 }
-.tree-left { left: -60px; }
-.tree-right { right: -60px; transform: scaleX(-1); }
+.tree-left { left: -10vw; }
+.tree-right { right: -10vw; transform: scaleX(-1); } /* กลับด้านต้นไม้ฝั่งขวา */
 
-/* ต้นไม้เล็กป่าหลัง (เพิ่มความหนาแน่น) */
-.nature-tree-back {
+/* กวางกินน้ำสมูทๆ (ใช้ภาพ GIF ขยับได้) */
+.realistic-deer {
     position: absolute;
-    bottom: 25vh;
-    font-size: 150px;
-    line-height: 1;
-    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2));
-    z-index: -1;
-    opacity: 0.7;
-}
-
-/* พุ่มไม้และของตกแต่งป่า */
-.nature-bush {
-    position: absolute;
-    bottom: 15vh;
-    font-size: 70px;
-    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
-}
-
-/* กวาง (มีอนิเมชันขยับได้) */
-.nature-deer {
-    position: absolute;
-    bottom: 16vh;
-    left: 35%;
-    font-size: 90px;
-    transform-origin: bottom center;
-    /* สั่งให้เล่นอนิเมชันชื่อ deerAction วนลูปไปเรื่อยๆ */
-    animation: deerAction 14s infinite ease-in-out; 
-}
-
-/* สร้างท่าทางการขยับของกวาง (เดินหน้า ก้มกินน้ำ ถอยหลัง) */
-@keyframes deerAction {
-    0%, 100% { transform: scaleX(-1) translateX(0) rotate(0deg); } /* ยืนมองเฉยๆ */
-    20% { transform: scaleX(-1) translateX(60px) rotate(0deg); } /* เดินเข้าหาบ่อน้ำ */
-    35%, 65% { transform: scaleX(-1) translateX(70px) rotate(-20deg); } /* ก้มหัวลงกินน้ำ */
-    80% { transform: scaleX(-1) translateX(20px) rotate(0deg); } /* ถอยหลังกลับมา */
-}
-
-/* อนิเมชันใบไม้ร่วง */
-.falling-leaf {
-    position: absolute;
-    font-size: 24px;
-    top: -50px;
-    animation: fall linear infinite;
+    bottom: 11vh;
+    left: 42%;
+    width: 180px;
+    height: 180px;
+    /* ภาพ GIF กวางขยับแบบโปร่งใส */
+    background: url('https://i.pinimg.com/originals/99/bd/2b/99bd2b6f1082c5f59048a6020586616a.gif') center/contain no-repeat;
+    z-index: 3;
     pointer-events: none;
 }
-@keyframes fall {
-    0% { transform: translateY(-50px) rotate(0deg) translateX(0); }
-    100% { transform: translateY(110vh) rotate(360deg) translateX(100px); }
+
+/* อนิเมชันใบไม้ร่วงสมจริง */
+.realistic-leaf {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    /* รูปใบไม้จริงแบบไม่มีพื้นหลัง */
+    background: url('https://cdn.pixabay.com/photo/2012/04/14/16/37/leaf-34502_960_720.png') center/contain no-repeat;
+    animation: fallRealistic linear forwards;
+    pointer-events: none;
+    z-index: 4;
+}
+
+@keyframes fallRealistic {
+    0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(85vh) rotate(360deg) translateX(100px); opacity: 0; }
 }
 
 /* =========================================
-   เคอร์เซอร์รดน้ำ & หยดน้ำ
+   เคอร์เซอร์รดน้ำ (ใช้แบบเดิม)
    ========================================= */
-body {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" style="font-size:35px;"><text y="35">🚿</text></svg>'), auto;
-}
-button, a, input {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" style="font-size:35px;"><text y="35">🚿</text></svg>'), pointer !important;
-}
+body { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" style="font-size:35px;"><text y="35">🚿</text></svg>'), auto; }
+button, a, input { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" style="font-size:35px;"><text y="35">🚿</text></svg>'), pointer !important; }
 .water-drop {
-    position: fixed;
-    font-size: 20px;
-    pointer-events: none;
-    z-index: 9999;
+    position: fixed; font-size: 20px; pointer-events: none; z-index: 9999;
     animation: watering 0.6s ease-in forwards;
 }
 @keyframes watering {
