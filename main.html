@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile & Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
     <style>
         * { box-sizing: border-box; }
         
@@ -117,14 +117,15 @@
             display: flex;
             gap: 10px;
             margin-bottom: 12px;
+            flex-wrap: wrap;
         }
 
         .preset-avatar {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 2px solid #e2e8f0;
             transition: 0.2s;
             object-fit: cover;
             background: #fff;
@@ -133,6 +134,7 @@
         .preset-avatar:hover {
             border-color: #315efb;
             transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(49, 94, 251, 0.3);
         }
 
         .btn-action {
@@ -198,7 +200,7 @@
             <div class="settings-grid">
                 
                 <div class="settings-box">
-                    <h4>✏️ ชื่อโปรไฟล์ (Display Name)</h4>
+                    <h4>✏️ เปลี่ยนชื่อโปรไฟล์ (Display Name)</h4>
                     <div class="input-group">
                         <input type="text" id="displayNameInput" class="input-field" placeholder="กรอกชื่อของคุณ">
                         <button id="saveProfileBtn" class="btn-action">บันทึกชื่อ</button>
@@ -206,21 +208,20 @@
                 </div>
 
                 <div class="settings-box">
-                    <h4>🖼️ รูปโปรไฟล์ (Profile Avatar)</h4>
+                    <h4>🖼️ เลือกรูปโปรไฟล์ (Avatar)</h4>
                     
-                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px;">1. เลือกรูปการ์ตูนสำเร็จรูป:</div>
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 8px;">คลิกเลือกรูปการ์ตูนเพื่อเปลี่ยนทันที:</div>
                     <div class="preset-container">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy')">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/big-smile/svg?seed=Cool" onclick="selectPreset('https://api.dicebear.com/7.x/big-smile/svg?seed=Cool')">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1')" title="Robot">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby')" title="Avatar 1">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy')" title="Emoji">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/big-smile/svg?seed=Cool" onclick="selectPreset('https://api.dicebear.com/7.x/big-smile/svg?seed=Cool')" title="Smile">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/lorelei/svg?seed=Star" onclick="selectPreset('https://api.dicebear.com/7.x/lorelei/svg?seed=Star')" title="Star">
                     </div>
 
-                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px; margin-top: 10px;">2. หรือเลือกรูปจากมือถือ/คอมพิวเตอร์:</div>
-                    <input type="file" id="fileInput" accept="image/*" class="input-field" style="background: white; margin-bottom: 10px; width: 100%;">
-
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px; margin-top: 12px;">หรือวาง URL รูปภาพจากเว็บ:</div>
                     <div class="input-group">
-                        <input type="url" id="photoUrlInput" class="input-field" placeholder="หรือวาง URL ลิงก์รูปตรง (.jpg, .png)">
+                        <input type="url" id="photoUrlInput" class="input-field" placeholder="https://example.com/image.jpg">
                         <button id="savePhotoBtn" class="btn-action" style="background-color: #10b981;">บันทึกรูป</button>
                     </div>
                 </div>
@@ -260,6 +261,6 @@
 
     </div>
 
-    <script type="module" src="app.js?v=6"></script>
+    <script type="module" src="app.js?v=7"></script>
 </body>
 </html>
