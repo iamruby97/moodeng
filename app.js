@@ -4,7 +4,8 @@ import {
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     signOut, 
-    onAuthStateChanged 
+    onAuthStateChanged,
+    updateProfile 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -25,18 +26,25 @@ onAuthStateChanged(auth, (user) => {
     const isMainPage = window.location.pathname.includes("main.html");
 
     if (user) {
-        // ถ้าล็อกอินแล้ว แต่ไม่ได้อยู่หน้า main.html ให้ส่งไปหน้า main.html ทันที
         if (!isMainPage) {
             window.location.href = "main.html";
         } else {
-            // แสดงอีเมลในหน้า main.html
+            // ดึงชื่อโปรไฟล์ (ถ้าไม่มีจะใช้อีเมลส่วนหน้าก่อน @)
+            const displayName = user.displayName || user.email.split('@')[0];
+            
+            const userDisplayNameEl = document.getElementById('userDisplayName');
+            const welcomeNameEl = document.getElementById('welcomeName');
             const userEmailEl = document.getElementById('userEmail');
-            if (userEmailEl) {
-                userEmailEl.textContent = user.email;
+            const displayNameInput = document.getElementById('displayNameInput');
+
+            if (userDisplayNameEl) userDisplayNameEl.textContent = displayName;
+            if (welcomeNameEl) welcomeNameEl.textContent = displayName;
+            if (userEmailEl) userEmailEl.textContent = user.email;
+            if (displayNameInput && !displayNameInput.value && user.displayName) {
+                displayNameInput.value = user.displayName;
             }
         }
     } else {
-        // ถ้ายังไม่ได้ล็อกอิน แต่อยู่หน้า main.html ให้ส่งกลับหน้าแรก
         if (isMainPage) {
             window.location.href = "index.html";
         }
@@ -96,6 +104,51 @@ if (logoutBtn) {
             window.location.href = "index.html";
         } catch (error) {
             alert("เกิดข้อผิดพลาดในการออกจากระบบ");
+        }
+    });
+}
+
+// --- 4. ระบบบันทึก / แก้ไขชื่อโปรไฟล์ ---
+const saveProfileBtn = document.getElementById('saveProfileBtn');
+const profileMsg = document.getElementById('profileMsg');
+
+if (saveProfileBtn) {
+    saveProfileBtn.addEventListener('click', async () => {
+        const newName = document.getElementById('displayNameInput').value.trim();
+        const currentUser = auth.currentUser;
+
+        if (!newName) {
+            profileMsg.style.color = "red";
+            profileMsg.textContent = "กรุณากรอกชื่อโปรไฟล์";
+            return;
+        }
+
+        if (currentUser) {
+            try {
+                saveProfileBtn.disabled = true;
+                saveProfileBtn.textContent = "กำลังบันทึก...";
+
+                // อัปเดต Display Name ในระบบ Firebase Auth
+                await updateProfile(currentUser, {
+                    displayName: newName
+                });
+
+                profileMsg.style.color = "green";
+                profileMsg.textContent = "อัปเดตชื่อโปรไฟล์สำเร็จ! 🎉";
+
+                // อัปเดตการแสดงผลบนหน้าจอทันที
+                const userDisplayNameEl = document.getElementById('userDisplayName');
+                const welcomeNameEl = document.getElementById('welcomeName');
+                if (userDisplayNameEl) userDisplayNameEl.textContent = newName;
+                if (welcomeNameEl) welcomeNameEl.textContent = newName;
+
+            } catch (error) {
+                profileMsg.style.color = "red";
+                profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
+            } finally {
+                saveProfileBtn.disabled = false;
+                saveProfileBtn.textContent = "บันทึกชื่อ";
+            }
         }
     });
 }
