@@ -3,61 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .form-box { display: none; }
-        .form-box.active { display: block; }
-        .toggle-link { color: #315efb; cursor: pointer; font-weight: bold; text-decoration: underline; }
-    </style>
+    <title>เข้าสู่ระบบ - EDUVA Learn Track</title>
+    <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
-    <div class="login-box" style="max-width: 400px; margin: 40px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: center;">
-        
-        <!-- 1. ฟอร์มเข้าสู่ระบบ -->
-        <div id="loginSection" class="form-box active">
-            <h2 style="margin-bottom: 20px;">เข้าสู่ระบบ</h2>
-            <form id="loginForm">
-                <input type="email" id="loginEmail" placeholder="อีเมล" required style="width: 100%; padding: 12px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
-                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required style="width: 100%; padding: 12px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
-                <button type="submit" style="width: 100%; padding: 12px; background-color: #315efb; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px;">เข้าสู่ระบบ</button>
-            </form>
-            <p id="loginMessage" style="margin-top: 15px;"></p>
-            <p style="margin-top: 20px; color: #666;">
-                ยังไม่มีบัญชี? <span class="toggle-link" onclick="switchTab('signup')">สมัครสมาชิก</span>
-            </p>
-        </div>
 
-        <!-- 2. ฟอร์มสมัครสมาชิก -->
-        <div id="signupSection" class="form-box">
-            <h2 style="margin-bottom: 20px;">สมัครสมาชิก</h2>
-            <form id="signupForm">
-                <input type="email" id="email" placeholder="อีเมล" required style="width: 100%; padding: 12px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
-                <input type="password" id="password" placeholder="รหัสผ่าน (6 ตัวขึ้นไป)" required style="width: 100%; padding: 12px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px;">
-                <button type="submit" style="width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px;">สมัครสมาชิก</button>
-            </form>
-            <p id="message" style="margin-top: 15px;"></p>
-            <p style="margin-top: 20px; color: #666;">
-                มีบัญชีอยู่แล้ว? <span class="toggle-link" onclick="switchTab('login')">เข้าสู่ระบบ</span>
-            </p>
-        </div>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>📚 EDUVA Learn Track</h2>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">ยินดีต้อนรับสู่ระบบติดตามการเรียนรู้</p>
 
+            <div id="loginBox">
+                <h3>เข้าสู่ระบบ</h3>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>อีเมล:</label>
+                        <input type="email" id="loginEmail" class="input-field" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>รหัสผ่าน:</label>
+                        <input type="password" id="loginPassword" class="input-field" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
+                </form>
+                <p id="loginMessage" class="msg-box"></p>
+                <p style="font-size: 13px; margin-top: 15px;">ยังไม่มีบัญชี? <a href="#" onclick="toggleAuth(true)" style="color:#315efb; font-weight:600;">สมัครสมาชิกที่นี่</a></p>
+            </div>
+
+            <div id="signupBox" style="display: none;">
+                <h3>สมัครสมาชิก</h3>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label>อีเมล:</label>
+                        <input type="email" id="email" class="input-field" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>รหัสผ่าน (อย่างน้อย 6 ตัว):</label>
+                        <input type="password" id="password" class="input-field" placeholder="••••••••" minlength="6" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="background-color: #10b981;">สมัครสมาชิก</button>
+                </form>
+                <p id="message" class="msg-box"></p>
+                <p style="font-size: 13px; margin-top: 15px;">มีบัญชีอยู่แล้ว? <a href="#" onclick="toggleAuth(false)" style="color:#315efb; font-weight:600;">เข้าสู่ระบบ</a></p>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        function switchTab(tab) {
-            const loginSection = document.getElementById('loginSection');
-            const signupSection = document.getElementById('signupSection');
-
-            if (tab === 'login') {
-                loginSection.classList.add('active');
-                signupSection.classList.remove('active');
-            } else {
-                signupSection.classList.add('active');
-                loginSection.classList.remove('active');
-            }
+        function toggleAuth(showSignup) {
+            document.getElementById('loginBox').style.display = showSignup ? 'none' : 'block';
+            document.getElementById('signupBox').style.display = showSignup ? 'block' : 'none';
         }
     </script>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="app.js?v=10"></script>
 </body>
 </html>
