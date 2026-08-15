@@ -253,52 +253,57 @@ if (fileInput) {
         }
     });
 }
-// --- สร้างฉากป่าธรรมชาติ & ระบบรดน้ำ (เวอร์ชันอัปเกรด) ---
-const createNatureScene = () => {
-    // ลบฉากป่าอันเก่าออกก่อน (ป้องกันการสร้างซ้ำซ้อน)
+// --- สร้างฉากป่าสมจริง (Realistic Scene) ---
+const createRealisticNature = () => {
+    // ลบของเก่าออก
     const oldBg = document.querySelector('.nature-bg');
     if (oldBg) oldBg.remove();
 
-    // 1. สร้างโครงสร้างป่าที่ลึกและมีรายละเอียดมากขึ้น
+    // สร้างโครงสร้าง
     const bgArea = document.createElement('div');
     bgArea.className = 'nature-bg';
     bgArea.innerHTML = `
-        <div class="nature-hill-back"></div>
-        
-        <div class="nature-tree-back" style="left: 10%;">🌲</div>
-        <div class="nature-tree-back" style="left: 25%;">🌳</div>
-        <div class="nature-tree-back" style="right: 25%;">🌲</div>
-        <div class="nature-tree-back" style="right: 10%;">🌳</div>
-        
-        <div class="nature-hill"></div>
-        <div class="nature-pond"></div>
-        
-        <div class="nature-bush" style="left: 15%;">🪴</div>
-        <div class="nature-bush" style="right: 22%;">🌻</div>
-        <div class="nature-bush" style="left: 45%; bottom: 6vh; font-size: 40px; z-index: 1;">🍄</div>
-
-        <div class="nature-tree tree-left">🌳</div>
-        <div class="nature-tree tree-right">🌳</div>
-        
-        <div class="nature-deer">🦌</div>
+        <div class="realistic-pond"></div>
+        <div class="realistic-tree tree-left"></div>
+        <div class="realistic-tree tree-right"></div>
+        <div class="realistic-deer"></div>
     `;
-    
-    // ดันฉากทั้งหมดไปไว้ล่างสุดของเว็บ
     document.body.insertBefore(bgArea, document.body.firstChild);
 
-    // 2. ระบบเสกใบไม้ร่วง (ปรับให้ร่วงเยอะขึ้นนิดนึงให้ได้ฟิลป่า)
+    // ระบบใบไม้ร่วง "จากต้นไม้เท่านั้น"
     setInterval(() => {
         const leaf = document.createElement('div');
-        leaf.className = 'falling-leaf';
-        leaf.innerText = Math.random() > 0.5 ? '🍂' : '🍃';
-        leaf.style.left = Math.random() * 100 + 'vw';
-        leaf.style.animationDuration = (Math.random() * 6 + 7) + 's'; // ตกเร็วขึ้นนิดนึง
+        leaf.className = 'realistic-leaf';
         
-        bgArea.appendChild(leaf);
-        setTimeout(() => leaf.remove(), 15000);
-    }, 600); 
+        // สุ่มเลือกว่าจะตกจากต้นซ้าย (0) หรือ ต้นขวา (1)
+        const isLeftTree = Math.random() > 0.5;
+        
+        if (isLeftTree) {
+            // สุ่มตำแหน่งให้อยู่ในช่วงของต้นไม้ฝั่งซ้าย (0% - 30% ของหน้าจอ)
+            leaf.style.left = (Math.random() * 30) + 'vw';
+        } else {
+            // สุ่มตำแหน่งให้อยู่ในช่วงของต้นไม้ฝั่งขวา (70% - 100% ของหน้าจอ)
+            leaf.style.left = (70 + (Math.random() * 30)) + 'vw';
+        }
+        
+        // สุ่มให้เริ่มตกจากความสูงระดับกิ่งไม้ (ด้านบนๆ)
+        leaf.style.top = (Math.random() * 20 - 10) + 'vh';
+        
+        // สุ่มความเร็วในการปลิวตกดิน (6 ถึง 11 วินาที)
+        leaf.style.animationDuration = (Math.random() * 5 + 6) + 's';
+        
+        // สุ่มขนาดใบไม้ให้มีเล็กบ้างใหญ่บ้าง
+        const size = (Math.random() * 15 + 15) + 'px';
+        leaf.style.width = size;
+        leaf.style.height = size;
 
-    // 3. ระบบคลิกเพื่อรดน้ำ (เช็คก่อนว่ามีระบบนี้อยู่แล้วหรือยัง เพื่อกันน้ำหยดเบิ้ล)
+        bgArea.appendChild(leaf);
+        
+        // ลบทิ้งเมื่อตกถึงพื้น
+        setTimeout(() => leaf.remove(), 11000);
+    }, 400); // เสกใบไม้ใหม่ทุกๆ 0.4 วินาที
+
+    // ระบบรดน้ำ
     if (!window.wateringEventAdded) {
         document.addEventListener('mousedown', (e) => {
             for (let i = 0; i < 4; i++) {
@@ -318,4 +323,4 @@ const createNatureScene = () => {
 };
 
 // เรียกใช้งานฟังก์ชัน
-createNatureScene();
+createRealisticNature();
