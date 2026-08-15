@@ -5,26 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUVA Learn Track</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=8888">
+    <link rel="stylesheet" href="style.css?v=9002">
 </head>
 <body>
 
     <header class="navbar">
         <div class="logo">📚 EDUVA Learn Track</div>
+
+        <!-- ย้ายการ์ดโปรไฟล์มาไว้ใน navbar เพื่อจัดตำแหน่งขวาบน -->
+        <div class="top-right-profile">
+            <img id="profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
+            <div class="user-info">
+                <h2 id="username-text" class="username">puupy</h2>
+                <p class="email">im1ssolddc@gmail.com</p>
+            </div>
+        </div>
     </header>
 
     <main class="dashboard-container">
         
-        <section class="profile-card">
-            <div class="avatar-wrapper">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
-            </div>
-            <h2 class="username">puupy</h2>
-            <p class="email">im1ssolddc@gmail.com</p>
-        </section>
-
+        <!-- การ์ด 3 ช่องตรงกลาง -->
         <section class="grid-cards">
-            
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
                 <ul>
@@ -50,11 +51,10 @@
                     <div class="progress-fill" style="width: 75%;"></div>
                 </div>
             </div>
-
         </section>
 
     </main>
 
-    <script type="module" src="app.js?v=8888"></script>
+    <script type="module" src="app.js?v=9002"></script>
 </body>
 </html>
