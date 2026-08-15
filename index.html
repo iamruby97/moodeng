@@ -1,124 +1,23 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>EDUVA Learn Track</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-
-            background-image: url("background.gif");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            height: 100vh;
-            margin: 0;
-        }
-
-        .login-box {
-            background: white;
-            width: 350px;
-            padding: 35px;
-            border-radius: 20px;
-            text-align: center;
-
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        h1 {
-            color: #315efb;
-            margin-bottom: 5px;
-        }
-
-        p {
-            color: #666;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            box-sizing: border-box;
-
-            border: 1px solid #ddd;
-            border-radius: 10px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-
-            border: none;
-            border-radius: 10px;
-
-            background: #315efb;
-            color: white;
-
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #244bd0;
-        }
-    </style>
+    <title>หน้าแรก - เว็บไซต์ของฉัน</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <div class="login-box">
+    <header style="display: flex; justify-content: flex-end; padding: 20px; gap: 10px;">
+        <a href="login.html" style="padding: 10px 20px; background-color: #315efb; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">เข้าสู่ระบบ (Sign In)</a>
+        <a href="signup.html" style="padding: 10px 20px; background-color: #e0e0e0; color: #333; text-decoration: none; border-radius: 6px; font-weight: bold;">สมัครสมาชิก (Sign Up)</a>
+    </header>
 
-        <h1>EDUVA</h1>
+    <main style="text-align: center; margin-top: 50px;">
+        <h1>ยินดีต้อนรับสู่เว็บไซต์ของเรา! 🚀</h1>
+        <p>เลือกกดปุ่มด้านบนขวาเพื่อเข้าสู่ระบบหรือสมัครสมาชิกได้เลย</p>
+    </main>
 
-        <p>Learn Track</p>
-
-        <input
-            type="text"
-            id="username"
-            placeholder="ชื่อผู้ใช้งาน">
-
-        <input
-            type="password"
-            id="password"
-            placeholder="รหัสผ่าน">
-
-        <button onclick="login()">
-            เข้าสู่ระบบ
-        </button>
-
-    </div>
-
-    <script>
-        function login() {
-
-            let username =
-                document.getElementById("username").value;
-
-            let password =
-                document.getElementById("password").value;
-
-            if (username === "" || password === "") {
-
-                alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
-
-                return;
-            }
-
-            alert("เข้าสู่ระบบสำเร็จ!");
-        }
-    </script>
-
+    <script type="module" src="app.js"></script>
 </body>
-
-</html><a href="signup.html">ไปที่หน้าสมัครสมาชิก</a><a href="index.html">กลับสู่หน้าหลัก</a>
+</html>
