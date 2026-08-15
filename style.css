@@ -9,19 +9,18 @@ body {
     min-height: 100vh;
     background-color: #e0f7fa;
     color: #333;
+    position: relative;
 }
 
-/* Navbar ชิดซ้าย-ขวา */
+/* แถบ Navbar ด้านบน */
 .navbar {
     width: 100%;
-    padding: 10px 24px;
+    height: 60px;
+    padding: 0 30px;
     background: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    position: relative;
-    z-index: 100;
 }
 
 .logo {
@@ -30,19 +29,23 @@ body {
     color: #1a73e8;
 }
 
-/* ส่วนจัดวางโปรไฟล์ขวาบนสุด */
+/* ล็อกตำแหน่งโปรไฟล์ไว้มุมขวาบนสุดแบบเด็ดขาด */
 .user-profile-wrapper {
-    position: relative;
+    position: fixed !important;
+    top: 10px !important;
+    right: 20px !important;
+    z-index: 9999 !important;
 }
 
 .profile-card-top {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: #f8fafc;
+    background: #ffffff;
     padding: 4px 12px 4px 6px;
     border-radius: 30px;
     border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .user-avatar {
@@ -99,7 +102,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    z-index: 200;
 }
 
 .hidden {
@@ -142,10 +144,10 @@ body {
     font-size: 11px;
 }
 
-/* เนื้อหาหลักตรงกลาง */
+/* คอนเทนเนอร์เนื้อหาหลัก */
 .dashboard-container {
     max-width: 900px;
-    margin: 50px auto;
+    margin: 60px auto 40px auto;
     padding: 0 20px;
 }
 
