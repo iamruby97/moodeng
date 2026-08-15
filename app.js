@@ -253,74 +253,68 @@ if (fileInput) {
         }
     });
 }
-// --- 7. เอฟเฟกต์พื้นหลังตามเมาส์ (Cursor Glow) ---
-const createCursorGlow = () => {
-    // ตรวจสอบก่อนว่าไม่ได้เล่นบนมือถือ (หน้าจอเล็กกว่า 768px มักเป็นระบบสัมผัส)
-    if (window.innerWidth <= 768) return;
-
-    // สร้างกล่อง div สำหรับทำวงแสง
-    const cursorGlow = document.createElement('div');
-    cursorGlow.classList.add('cursor-glow');
-    document.body.appendChild(cursorGlow);
-
-    // ดักจับการขยับของเมาส์
-    document.addEventListener('mousemove', (e) => {
-        // อัปเดตตำแหน่งแกน X และ Y ให้ตรงกับเมาส์
-        cursorGlow.style.left = e.clientX + 'px';
-        cursorGlow.style.top = e.clientY + 'px';
-    });
-};
-// --- สร้างฉากป่าธรรมชาติ & ระบบรดน้ำ ---
+// --- สร้างฉากป่าธรรมชาติ & ระบบรดน้ำ (เวอร์ชันอัปเกรด) ---
 const createNatureScene = () => {
-    // 1. สร้างโครงสร้างป่า
+    // ลบฉากป่าอันเก่าออกก่อน (ป้องกันการสร้างซ้ำซ้อน)
+    const oldBg = document.querySelector('.nature-bg');
+    if (oldBg) oldBg.remove();
+
+    // 1. สร้างโครงสร้างป่าที่ลึกและมีรายละเอียดมากขึ้น
     const bgArea = document.createElement('div');
     bgArea.className = 'nature-bg';
     bgArea.innerHTML = `
+        <div class="nature-hill-back"></div>
+        
+        <div class="nature-tree-back" style="left: 10%;">🌲</div>
+        <div class="nature-tree-back" style="left: 25%;">🌳</div>
+        <div class="nature-tree-back" style="right: 25%;">🌲</div>
+        <div class="nature-tree-back" style="right: 10%;">🌳</div>
+        
         <div class="nature-hill"></div>
         <div class="nature-pond"></div>
+        
+        <div class="nature-bush" style="left: 15%;">🪴</div>
+        <div class="nature-bush" style="right: 22%;">🌻</div>
+        <div class="nature-bush" style="left: 45%; bottom: 6vh; font-size: 40px; z-index: 1;">🍄</div>
+
         <div class="nature-tree tree-left">🌳</div>
         <div class="nature-tree tree-right">🌳</div>
+        
         <div class="nature-deer">🦌</div>
     `;
-    // แทรกฉากหลังไปที่ส่วนบนสุดของ Body
+    
+    // ดันฉากทั้งหมดไปไว้ล่างสุดของเว็บ
     document.body.insertBefore(bgArea, document.body.firstChild);
 
-    // 2. ระบบเสกใบไม้ร่วง
+    // 2. ระบบเสกใบไม้ร่วง (ปรับให้ร่วงเยอะขึ้นนิดนึงให้ได้ฟิลป่า)
     setInterval(() => {
         const leaf = document.createElement('div');
         leaf.className = 'falling-leaf';
-        // สุ่มเลือกว่าจะเป็นใบไม้แห้งหรือใบไม้เขียว
         leaf.innerText = Math.random() > 0.5 ? '🍂' : '🍃';
-        // สุ่มตำแหน่งแกน X
         leaf.style.left = Math.random() * 100 + 'vw';
-        // สุ่มความเร็วในการตก (8 - 15 วินาที)
-        leaf.style.animationDuration = (Math.random() * 7 + 8) + 's';
+        leaf.style.animationDuration = (Math.random() * 6 + 7) + 's'; // ตกเร็วขึ้นนิดนึง
         
         bgArea.appendChild(leaf);
-        
-        // ลบใบไม้ทิ้งเมื่อตกถึงพื้นเพื่อไม่ให้รกเครื่อง
         setTimeout(() => leaf.remove(), 15000);
-    }, 800); // ออกใบใหม่ทุกๆ 0.8 วินาที
+    }, 600); 
 
-    // 3. ระบบคลิกเพื่อรดน้ำ 
-    document.addEventListener('mousedown', (e) => {
-        // สร้างหยดน้ำ 4 หยดเวลากดเมาส์
-        for (let i = 0; i < 4; i++) {
-            setTimeout(() => {
-                const drop = document.createElement('div');
-                drop.className = 'water-drop';
-                drop.innerText = '💧';
-                // คำนวณให้ออกมาตรงปลายฝักบัวพอดี (อาจต้องกะระยะนิดหน่อย)
-                drop.style.left = (e.clientX - 15 + (Math.random() * 30)) + 'px';
-                drop.style.top = (e.clientY + 20) + 'px';
-                
-                document.body.appendChild(drop);
-                
-                // ลบหยดน้ำทิ้งเมื่ออนิเมชันจบ
-                setTimeout(() => drop.remove(), 600);
-            }, i * 100); // หยดน้ำออกไล่เลี่ยกัน
-        }
-    });
+    // 3. ระบบคลิกเพื่อรดน้ำ (เช็คก่อนว่ามีระบบนี้อยู่แล้วหรือยัง เพื่อกันน้ำหยดเบิ้ล)
+    if (!window.wateringEventAdded) {
+        document.addEventListener('mousedown', (e) => {
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    const drop = document.createElement('div');
+                    drop.className = 'water-drop';
+                    drop.innerText = '💧';
+                    drop.style.left = (e.clientX - 15 + (Math.random() * 30)) + 'px';
+                    drop.style.top = (e.clientY + 20) + 'px';
+                    document.body.appendChild(drop);
+                    setTimeout(() => drop.remove(), 600);
+                }, i * 100);
+            }
+        });
+        window.wateringEventAdded = true;
+    }
 };
 
 // เรียกใช้งานฟังก์ชัน
