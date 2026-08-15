@@ -8,7 +8,7 @@ import {
     updateProfile 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Firebase Configuration (ห้ามแก้ส่วนนี้)
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB7nVG0DU8vI_yby6kWZ_4N0tKYBJI0pQw",
   authDomain: "moodeng-aa11a.firebaseapp.com",
@@ -24,36 +24,6 @@ const auth = getAuth(app);
 
 const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu";
 const profileMsg = document.getElementById('profileMsg');
-
-// --- เลือก Preset Avatar (การ์ตูน) ---
-window.selectPreset = async (avatarUrl) => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) return;
-
-    try {
-        if (profileMsg) {
-            profileMsg.style.color = "#315efb";
-            profileMsg.textContent = "กำลังอัปเดตรูปโปรไฟล์...";
-        }
-
-        await updateProfile(currentUser, { photoURL: avatarUrl });
-
-        const navAvatar = document.getElementById('navAvatar');
-        const userAvatar = document.getElementById('userAvatar');
-        if (navAvatar) navAvatar.src = avatarUrl;
-        if (userAvatar) userAvatar.src = avatarUrl;
-
-        if (profileMsg) {
-            profileMsg.style.color = "#10b981";
-            profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์สำเร็จ! ✨";
-        }
-    } catch (error) {
-        if (profileMsg) {
-            profileMsg.style.color = "#ef4444";
-            profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
-        }
-    }
-};
 
 // --- ตรวจสอบสถานะล็อกอินอัตโนมัติ (Auto Redirect) ---
 onAuthStateChanged(auth, (user) => {
@@ -97,21 +67,21 @@ const message = document.getElementById('message');
 
 if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // ป้องกันหน้าเว็บเด้งรีเฟรช
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             if (message) {
-                message.style.color = "green";
+                message.style.color = "#10b981"; // สีเขียว
                 message.textContent = "สมัครสมาชิกสำเร็จ! 🎉 กำลังไปหน้าหลัก...";
             }
             setTimeout(() => { window.location.href = "./main.html"; }, 800);
         } catch (error) {
             if (message) {
-                message.style.color = "red";
-                message.textContent = "เกิดข้อผิดพลาด: " + error.message;
+                message.style.color = "#ef4444"; // สีแดง
+                message.textContent = "เกิดข้อผิดพลาด: อีเมลนี้อาจถูกใช้ไปแล้ว หรือรหัสผ่านสั้นเกินไป";
             }
         }
     });
@@ -123,21 +93,21 @@ const loginMessage = document.getElementById('loginMessage');
 
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // ป้องกันหน้าเว็บเด้งรีเฟรช
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-
+        
         try {
             await signInWithEmailAndPassword(auth, email, password);
             if (loginMessage) {
-                loginMessage.style.color = "green";
+                loginMessage.style.color = "#10b981"; // สีเขียว
                 loginMessage.textContent = "เข้าสู่ระบบสำเร็จ! 🎉 กำลังย้ายหน้า...";
             }
             setTimeout(() => { window.location.href = "./main.html"; }, 800);
         } catch (error) {
             if (loginMessage) {
-                loginMessage.style.color = "red";
-                loginMessage.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+                loginMessage.style.color = "#ef4444"; // สีแดง
+                loginMessage.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง โปรดลองอีกครั้ง";
             }
         }
     });
@@ -158,7 +128,6 @@ if (logoutBtn) {
 
 // --- 4. บันทึกชื่อโปรไฟล์ ---
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-
 if (saveProfileBtn) {
     saveProfileBtn.addEventListener('click', async () => {
         const newName = document.getElementById('displayNameInput').value.trim();
@@ -202,9 +171,38 @@ if (saveProfileBtn) {
     });
 }
 
-// --- 5. อัปโหลดรูปภาพขึ้น Cloud (ImgBB) และนำ URL มาบันทึกใน Firebase ---
-const fileInput = document.getElementById('fileInput');
+// --- 5. เลือก Preset Avatar (การ์ตูน) ---
+window.selectPreset = async (avatarUrl) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
 
+    try {
+        if (profileMsg) {
+            profileMsg.style.color = "#315efb";
+            profileMsg.textContent = "กำลังอัปเดตรูปโปรไฟล์...";
+        }
+
+        await updateProfile(currentUser, { photoURL: avatarUrl });
+
+        const navAvatar = document.getElementById('navAvatar');
+        const userAvatar = document.getElementById('userAvatar');
+        if (navAvatar) navAvatar.src = avatarUrl;
+        if (userAvatar) userAvatar.src = avatarUrl;
+
+        if (profileMsg) {
+            profileMsg.style.color = "#10b981";
+            profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์สำเร็จ! ✨";
+        }
+    } catch (error) {
+        if (profileMsg) {
+            profileMsg.style.color = "#ef4444";
+            profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
+        }
+    }
+};
+
+// --- 6. อัปโหลดรูปภาพขึ้น Cloud (ImgBB) ---
+const fileInput = document.getElementById('fileInput');
 if (fileInput) {
     fileInput.addEventListener('change', async (e) => {
         const file = e.target.files[0];
@@ -218,7 +216,6 @@ if (fileInput) {
                 profileMsg.textContent = "กำลังอัปโหลดรูปภาพขึ้นระบบ... (รอสักครู่)";
             }
 
-            // ส่งไฟล์รูปไปฝากที่ ImgBB API
             const formData = new FormData();
             formData.append("image", file);
 
@@ -230,13 +227,9 @@ if (fileInput) {
             const result = await response.json();
 
             if (result.success) {
-                // ได้ลิงก์ URL สั้นๆ กลับมา
                 const imageUrl = result.data.url; 
-
-                // นำ URL สั้นๆ ไปบันทึกลง Firebase
                 await updateProfile(currentUser, { photoURL: imageUrl });
 
-                // อัปเดตแสดงผลหน้าเว็บ
                 const navAvatar = document.getElementById('navAvatar');
                 const userAvatar = document.getElementById('userAvatar');
                 if (navAvatar) navAvatar.src = imageUrl;
@@ -256,7 +249,6 @@ if (fileInput) {
                 profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
             }
         } finally {
-            // ล้างค่า input เพื่อให้สามารถเลือกรูปเดิมซ้ำได้ในครั้งต่อไป
             e.target.value = '';
         }
     });
