@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsMenu.classList.toggle('hidden');
         });
 
-        // คลิกพื้นที่อื่นในหน้าจอเพื่อปิดเมนูตั้งค่า
+        // ปิดเมนูเมื่อคลิกนอกพื้นที่
         document.addEventListener('click', (e) => {
             if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) {
                 settingsMenu.classList.add('hidden');
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // อัปโหลดเปลี่ยนรูปโปรไฟล์
+    // ระบบเปลี่ยนรูปโปรไฟล์
     if (imageInput && profileImg) {
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // เปลี่ยนชื่อโปรไฟล์
+    // ระบบเปลี่ยนชื่อโปรไฟล์
     if (saveNameBtn && nameInput && usernameText) {
         saveNameBtn.addEventListener('click', () => {
             const newName = nameInput.value.trim();
