@@ -253,74 +253,28 @@ if (fileInput) {
         }
     });
 }
-// --- สร้างฉากป่าสมจริง (Realistic Scene) ---
-const createRealisticNature = () => {
-    // ลบของเก่าออก
-    const oldBg = document.querySelector('.nature-bg');
+// --- สร้างพื้นหลัง 3D (Floating 3D Cubes) ---
+const create3DBackground = () => {
+    // ลบพื้นหลังเก่าออกก่อนเผื่อมีค้างอยู่
+    const oldBg = document.querySelector('.bg-3d-area') || document.querySelector('.nature-bg');
     if (oldBg) oldBg.remove();
 
-    // สร้างโครงสร้าง
+    // สร้างพื้นที่พื้นหลัง
     const bgArea = document.createElement('div');
-    bgArea.className = 'nature-bg';
-    bgArea.innerHTML = `
-        <div class="realistic-pond"></div>
-        <div class="realistic-tree tree-left"></div>
-        <div class="realistic-tree tree-right"></div>
-        <div class="realistic-deer"></div>
-    `;
-    document.body.insertBefore(bgArea, document.body.firstChild);
+    bgArea.className = 'bg-3d-area';
 
-    // ระบบใบไม้ร่วง "จากต้นไม้เท่านั้น"
-    setInterval(() => {
-        const leaf = document.createElement('div');
-        leaf.className = 'realistic-leaf';
-        
-        // สุ่มเลือกว่าจะตกจากต้นซ้าย (0) หรือ ต้นขวา (1)
-        const isLeftTree = Math.random() > 0.5;
-        
-        if (isLeftTree) {
-            // สุ่มตำแหน่งให้อยู่ในช่วงของต้นไม้ฝั่งซ้าย (0% - 30% ของหน้าจอ)
-            leaf.style.left = (Math.random() * 30) + 'vw';
-        } else {
-            // สุ่มตำแหน่งให้อยู่ในช่วงของต้นไม้ฝั่งขวา (70% - 100% ของหน้าจอ)
-            leaf.style.left = (70 + (Math.random() * 30)) + 'vw';
-        }
-        
-        // สุ่มให้เริ่มตกจากความสูงระดับกิ่งไม้ (ด้านบนๆ)
-        leaf.style.top = (Math.random() * 20 - 10) + 'vh';
-        
-        // สุ่มความเร็วในการปลิวตกดิน (6 ถึง 11 วินาที)
-        leaf.style.animationDuration = (Math.random() * 5 + 6) + 's';
-        
-        // สุ่มขนาดใบไม้ให้มีเล็กบ้างใหญ่บ้าง
-        const size = (Math.random() * 15 + 15) + 'px';
-        leaf.style.width = size;
-        leaf.style.height = size;
-
-        bgArea.appendChild(leaf);
-        
-        // ลบทิ้งเมื่อตกถึงพื้น
-        setTimeout(() => leaf.remove(), 11000);
-    }, 400); // เสกใบไม้ใหม่ทุกๆ 0.4 วินาที
-
-    // ระบบรดน้ำ
-    if (!window.wateringEventAdded) {
-        document.addEventListener('mousedown', (e) => {
-            for (let i = 0; i < 4; i++) {
-                setTimeout(() => {
-                    const drop = document.createElement('div');
-                    drop.className = 'water-drop';
-                    drop.innerText = '💧';
-                    drop.style.left = (e.clientX - 15 + (Math.random() * 30)) + 'px';
-                    drop.style.top = (e.clientY + 20) + 'px';
-                    document.body.appendChild(drop);
-                    setTimeout(() => drop.remove(), 600);
-                }, i * 100);
-            }
-        });
-        window.wateringEventAdded = true;
+    // สร้างกล่อง 10 ใบ
+    const ul = document.createElement('ul');
+    ul.className = 'bg-3d-cubes';
+    for (let i = 0; i < 10; i++) {
+        const li = document.createElement('li');
+        ul.appendChild(li);
     }
+
+    bgArea.appendChild(ul);
+    // แทรกไปหลังสุด
+    document.body.insertBefore(bgArea, document.body.firstChild);
 };
 
-// เรียกใช้งานฟังก์ชัน
-createRealisticNature();
+// เรียกใช้งาน
+create3DBackground();
