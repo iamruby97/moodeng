@@ -23,7 +23,7 @@ const auth = getAuth(app);
 
 const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng";
 
-// เพิ่มฟังก์ชันคลิกเลือกรูป Preset
+// ฟังก์ชันเลือกรูป Preset
 window.selectPreset = (url) => {
     const photoUrlInput = document.getElementById('photoUrlInput');
     if (photoUrlInput) {
@@ -59,7 +59,7 @@ onAuthStateChanged(auth, (user) => {
             if (displayNameInput && !displayNameInput.value && user.displayName) {
                 displayNameInput.value = user.displayName;
             }
-            if (photoUrlInput && !photoUrlInput.value && user.photoURL) {
+            if (photoUrlInput && !photoUrlInput.value && user.photoURL && !user.photoURL.startsWith('data:')) {
                 photoUrlInput.value = user.photoURL;
             }
         }
@@ -100,7 +100,7 @@ if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('password').value;
+        const password = document.getElementById('loginPassword').value;
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
@@ -162,47 +162,81 @@ if (saveProfileBtn) {
                 profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
             } finally {
                 saveProfileBtn.disabled = false;
-                saveProfileBtn.textContent = "บันทึก";
+                saveProfileBtn.textContent = "บันทึกชื่อ";
             }
         }
     });
 }
 
-// --- 5. บันทึกรูปโปรไฟล์ ---
+// --- 5. บันทึกรูปโปรไฟล์ (รองรับทั้งไฟล์จากเครื่อง และ URL) ---
 const savePhotoBtn = document.getElementById('savePhotoBtn');
+const fileInput = document.getElementById('fileInput');
 
 if (savePhotoBtn) {
     savePhotoBtn.addEventListener('click', async () => {
-        const newPhotoUrl = document.getElementById('photoUrlInput').value.trim();
         const currentUser = auth.currentUser;
+        if (!currentUser) return;
 
-        if (!newPhotoUrl) {
+        const urlInputVal = document.getElementById('photoUrlInput').value.trim();
+        const selectedFile = fileInput && fileInput.files[0];
+
+        if (!selectedFile && !urlInputVal) {
             profileMsg.style.color = "#ef4444";
-            profileMsg.textContent = "กรุณากรอกหรือเลือกรูปภาพ";
+            profileMsg.textContent = "กรุณเลือกไฟล์รูป หรือกรอก URL รูปภาพ";
             return;
         }
 
-        if (currentUser) {
+        profileMsg.style.color = "#315efb";
+        profileMsg.textContent = "กำลังประมวลผลรูปภาพ...";
+        savePhotoBtn.disabled = true;
+
+        // กรณีอัปโหลดไฟล์จากเครื่อง (ย่อขนาดรูปเป็น Base64)
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = async () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 100;
+                    canvas.height = 100;
+                    ctx.drawImage(img, 0, 0, 100, 100);
+                    
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                    try {
+                        await updateProfile(currentUser, { photoURL: compressedBase64 });
+                        profileMsg.style.color = "#10b981";
+                        profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์จากไฟล์สำเร็จ! 🖼️";
+
+                        document.getElementById('navAvatar').src = compressedBase64;
+                        document.getElementById('userAvatar').src = compressedBase64;
+                        fileInput.value = ""; // เคลียร์ไฟล์
+                    } catch (err) {
+                        profileMsg.style.color = "#ef4444";
+                        profileMsg.textContent = "เกิดข้อผิดพลาดในการบันทึกรูปภาพ";
+                    } finally {
+                        savePhotoBtn.disabled = false;
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(selectedFile);
+        } 
+        // กรณีใส่ URL ลิงก์รูปภาพ
+        else if (urlInputVal) {
             try {
-                savePhotoBtn.disabled = true;
-                savePhotoBtn.textContent = "กำลังบันทึก...";
-
-                await updateProfile(currentUser, { photoURL: newPhotoUrl });
-
+                await updateProfile(currentUser, { photoURL: urlInputVal });
                 profileMsg.style.color = "#10b981";
-                profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์สำเร็จ! 🖼️";
+                profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์จาก URL สำเร็จ! 🖼️";
 
-                const navAvatar = document.getElementById('navAvatar');
-                const userAvatar = document.getElementById('userAvatar');
-                if (navAvatar) navAvatar.src = newPhotoUrl;
-                if (userAvatar) userAvatar.src = newPhotoUrl;
-
+                document.getElementById('navAvatar').src = urlInputVal;
+                document.getElementById('userAvatar').src = urlInputVal;
             } catch (error) {
                 profileMsg.style.color = "#ef4444";
                 profileMsg.textContent = "ลิงก์รูปภาพไม่ถูกต้อง หรือเกิดข้อผิดพลาด";
             } finally {
                 savePhotoBtn.disabled = false;
-                savePhotoBtn.textContent = "บันทึกรูป";
             }
         }
     });
