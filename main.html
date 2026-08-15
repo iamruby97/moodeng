@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
     <style>
         * { box-sizing: border-box; }
         
-        /* แถบเมนูด้านบน */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -18,16 +17,31 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .navbar h2 { margin: 0; color: #315efb; font-size: 22px; }
-        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
 
-        /* จัดการหน้าหลัก */
+        .avatar-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #315efb;
+        }
+
+        .avatar-large {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #315efb;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
         .container {
             max-width: 900px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        /* การ์ดข้อมูล */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -74,6 +88,7 @@
     <nav class="navbar">
         <h2>📚 EDUVA Learn Track</h2>
         <div class="user-info">
+            <img id="navAvatar" class="avatar-img" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar">
             <span id="userDisplayName" style="font-weight: bold; color: #315efb;">กำลังโหลด...</span>
             <button id="logoutBtn" class="btn-logout">ออกจากระบบ</button>
         </div>
@@ -82,26 +97,35 @@
     <!-- พื้นที่เนื้อหาหลัก -->
     <div class="container">
         
-        <!-- การ์ดต้อนรับ + ตั้งค่าโปรไฟล์ -->
-        <div class="card">
-            <h2>ยินดีต้อนรับกลับมา, <span id="welcomeName" style="color: #315efb;">ผู้ใช้งาน</span>! 🎉</h2>
-            <p style="color: #666; margin-bottom: 15px;">อีเมลบัญชีของคุณ: <span id="userEmail" style="font-weight: bold; color: #333;">กำลังโหลด...</span></p>
+        <!-- การ์ดต้อนรับ + รูปโปรไฟล์ -->
+        <div class="card" style="text-align: center;">
+            <img id="userAvatar" class="avatar-large" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Profile Picture">
+            <h2 style="margin: 10px 0 5px 0;">ยินดีต้อนรับกลับมา, <span id="welcomeName" style="color: #315efb;">ผู้ใช้งาน</span>! 🎉</h2>
+            <p style="color: #666; margin-bottom: 20px;">อีเมลบัญชี: <span id="userEmail" style="font-weight: bold; color: #333;">กำลังโหลด...</span></p>
 
-            <!-- กล่องเปลี่ยนชื่อโปรไฟล์ -->
-            <div style="background: #f0f4ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                <h4 style="margin: 0 0 10px 0; color: #333;">✏️ แก้ไขชื่อโปรไฟล์ (Display Name)</h4>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <!-- โซนแก้ไขโปรไฟล์ -->
+            <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; text-align: left;">
+                
+                <!-- 1. แก้ไขชื่อ -->
+                <h4 style="margin: 0 0 8px 0; color: #333;">✏️ แก้ไขชื่อโปรไฟล์ (Display Name)</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
                     <input type="text" id="displayNameInput" placeholder="กรอกชื่อโปรไฟล์ของคุณ" style="flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px;">
                     <button id="saveProfileBtn" class="btn-save">บันทึกชื่อ</button>
                 </div>
-                <p id="profileMsg" style="margin: 8px 0 0 0; font-size: 14px; font-weight: bold;"></p>
+
+                <!-- 2. แก้ไขรูปโปรไฟล์ -->
+                <h4 style="margin: 0 0 8px 0; color: #333;">🖼️ เปลี่ยนรูปโปรไฟล์ (URL ภาพ)</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="url" id="photoUrlInput" placeholder="วางลิงก์รูปภาพ (URL)" style="flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px;">
+                    <button id="savePhotoBtn" class="btn-save" style="background-color: #28a745;">บันทึกรูป</button>
+                </div>
+
+                <p id="profileMsg" style="margin: 12px 0 0 0; font-size: 14px; font-weight: bold;"></p>
             </div>
         </div>
 
         <!-- โซนฟีเจอร์ต่างๆ -->
         <div class="grid">
-            
-            <!-- การ์ด 1: รายวิชา -->
             <div class="card">
                 <h3>📖 วิชาที่กำลังเรียน</h3>
                 <ul style="padding-left: 20px; color: #444; line-height: 1.8;">
@@ -111,7 +135,6 @@
                 </ul>
             </div>
 
-            <!-- การ์ด 2: รายการต้องทำ -->
             <div class="card">
                 <h3>✅ งานที่ต้องทำ (To-Do)</h3>
                 <ul style="padding-left: 20px; color: #444; line-height: 1.8;">
@@ -121,7 +144,6 @@
                 </ul>
             </div>
 
-            <!-- การ์ด 3: สถิติความก้าวหน้า -->
             <div class="card">
                 <h3>📊 เป้าหมายสัปดาห์นี้</h3>
                 <p style="color: #555;">ความก้าวหน้า: <strong>75%</strong></p>
@@ -129,10 +151,9 @@
                     <div style="width: 75%; background: #315efb; height: 100%;"></div>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <script type="module" src="app.js?v=3"></script>
+    <script type="module" src="app.js?v=4"></script>
 </body>
 </html>
