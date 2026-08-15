@@ -8,7 +8,7 @@ import {
     updateProfile 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// คอนฟิก Firebase
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB7nVG0DU8vI_yby6kWZ_4N0tKYBJI0pQw",
   authDomain: "moodeng-aa11a.firebaseapp.com",
@@ -24,7 +24,7 @@ const auth = getAuth(app);
 
 const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu";
 
-// --- ฟังก์ชันเลือก Preset Avatar (คลิกเดียวเปลี่ยนรูปทันที) ---
+// --- เลือก Preset Avatar (การ์ตูน) ---
 window.selectPreset = async (avatarUrl) => {
     const currentUser = auth.currentUser;
     const profileMsg = document.getElementById('profileMsg');
@@ -204,7 +204,7 @@ if (saveProfileBtn) {
     });
 }
 
-// --- 5. เลือกอัปโหลดไฟล์รูปภาพจากเครื่อง (ย่อขนาดอัตโนมัติ) ---
+// --- 5. ระบบบีบอัดภาพและอัปโหลดจากมือถือ/คอมพิวเตอร์ ---
 const fileInput = document.getElementById('fileInput');
 
 if (fileInput) {
@@ -217,22 +217,38 @@ if (fileInput) {
         try {
             if (profileMsg) {
                 profileMsg.style.color = "#315efb";
-                profileMsg.textContent = "กำลังย่อขนาดและอัปเดตรูปภาพ...";
+                profileMsg.textContent = "กำลังบีบอัดรูปภาพ...";
             }
 
             const reader = new FileReader();
             reader.onload = (event) => {
                 const img = new Image();
                 img.onload = async () => {
-                    // สร้าง Canvas ย่อขนาดรูปเป็น 96x96 px ให้ไฟล์ขนาดเล็กบันทึกลง Firebase ได้ชัวร์
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    canvas.width = 96;
-                    canvas.height = 96;
-                    ctx.drawImage(img, 0, 0, 96, 96);
+                    // ปรับขนาดความกว้าง/ยาวของรูป
+                    const size = 48;
+                    canvas.width = size;
+                    canvas.height = size;
+                    ctx.drawImage(img, 0, 0, size, size);
                     
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    // ระบบลดคุณภาพอัตโนมัติจนกว่าความยาวตัวอักษรจะน้อยกว่า 2000 ตัว
+                    let quality = 0.4;
+                    let compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+
+                    while (compressedBase64.length > 2000 && quality > 0.05) {
+                        quality -= 0.05;
+                        compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    }
+
+                    if (compressedBase64.length > 2000) {
+                        if (profileMsg) {
+                            profileMsg.style.color = "#ef4444";
+                            profileMsg.textContent = "รูปภาพนี้มีความซับซ้อนสูงเกินไป กรุณาเลือกรูปอื่น";
+                        }
+                        return;
+                    }
 
                     try {
                         await updateProfile(currentUser, { photoURL: compressedBase64 });
@@ -249,7 +265,7 @@ if (fileInput) {
                     } catch (err) {
                         if (profileMsg) {
                             profileMsg.style.color = "#ef4444";
-                            profileMsg.textContent = "บันทึกรูปภาพไม่สำเร็จ: " + err.message;
+                            profileMsg.textContent = "เกิดข้อผิดพลาดในการบันทึก: " + err.message;
                         }
                     }
                 };
