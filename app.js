@@ -21,6 +21,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+
 // --- ตรวจสอบสถานะการล็อกอินอัตโนมัติ ---
 onAuthStateChanged(auth, (user) => {
     const isMainPage = window.location.pathname.includes("main.html");
@@ -29,19 +31,28 @@ onAuthStateChanged(auth, (user) => {
         if (!isMainPage) {
             window.location.href = "main.html";
         } else {
-            // ดึงชื่อโปรไฟล์ (ถ้าไม่มีจะใช้อีเมลส่วนหน้าก่อน @)
             const displayName = user.displayName || user.email.split('@')[0];
-            
+            const avatarUrl = user.photoURL || defaultAvatar;
+
             const userDisplayNameEl = document.getElementById('userDisplayName');
             const welcomeNameEl = document.getElementById('welcomeName');
             const userEmailEl = document.getElementById('userEmail');
             const displayNameInput = document.getElementById('displayNameInput');
+            const photoUrlInput = document.getElementById('photoUrlInput');
+            const navAvatar = document.getElementById('navAvatar');
+            const userAvatar = document.getElementById('userAvatar');
 
             if (userDisplayNameEl) userDisplayNameEl.textContent = displayName;
             if (welcomeNameEl) welcomeNameEl.textContent = displayName;
             if (userEmailEl) userEmailEl.textContent = user.email;
+            if (navAvatar) navAvatar.src = avatarUrl;
+            if (userAvatar) userAvatar.src = avatarUrl;
+
             if (displayNameInput && !displayNameInput.value && user.displayName) {
                 displayNameInput.value = user.displayName;
+            }
+            if (photoUrlInput && !photoUrlInput.value && user.photoURL) {
+                photoUrlInput.value = user.photoURL;
             }
         }
     } else {
@@ -81,7 +92,7 @@ if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
+        const password = document.getElementById('password').value;
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
@@ -108,7 +119,7 @@ if (logoutBtn) {
     });
 }
 
-// --- 4. ระบบบันทึก / แก้ไขชื่อโปรไฟล์ ---
+// --- 4. บันทึก/แก้ไขชื่อโปรไฟล์ ---
 const saveProfileBtn = document.getElementById('saveProfileBtn');
 const profileMsg = document.getElementById('profileMsg');
 
@@ -128,15 +139,11 @@ if (saveProfileBtn) {
                 saveProfileBtn.disabled = true;
                 saveProfileBtn.textContent = "กำลังบันทึก...";
 
-                // อัปเดต Display Name ในระบบ Firebase Auth
-                await updateProfile(currentUser, {
-                    displayName: newName
-                });
+                await updateProfile(currentUser, { displayName: newName });
 
                 profileMsg.style.color = "green";
                 profileMsg.textContent = "อัปเดตชื่อโปรไฟล์สำเร็จ! 🎉";
 
-                // อัปเดตการแสดงผลบนหน้าจอทันที
                 const userDisplayNameEl = document.getElementById('userDisplayName');
                 const welcomeNameEl = document.getElementById('welcomeName');
                 if (userDisplayNameEl) userDisplayNameEl.textContent = newName;
@@ -148,6 +155,46 @@ if (saveProfileBtn) {
             } finally {
                 saveProfileBtn.disabled = false;
                 saveProfileBtn.textContent = "บันทึกชื่อ";
+            }
+        }
+    });
+}
+
+// --- 5. บันทึก/แก้ไขรูปโปรไฟล์ (Photo URL) ---
+const savePhotoBtn = document.getElementById('savePhotoBtn');
+
+if (savePhotoBtn) {
+    savePhotoBtn.addEventListener('click', async () => {
+        const newPhotoUrl = document.getElementById('photoUrlInput').value.trim();
+        const currentUser = auth.currentUser;
+
+        if (!newPhotoUrl) {
+            profileMsg.style.color = "red";
+            profileMsg.textContent = "กรุณากรอกลิงก์รูปภาพ (URL)";
+            return;
+        }
+
+        if (currentUser) {
+            try {
+                savePhotoBtn.disabled = true;
+                savePhotoBtn.textContent = "กำลังบันทึก...";
+
+                await updateProfile(currentUser, { photoURL: newPhotoUrl });
+
+                profileMsg.style.color = "green";
+                profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์สำเร็จ! 🖼️";
+
+                const navAvatar = document.getElementById('navAvatar');
+                const userAvatar = document.getElementById('userAvatar');
+                if (navAvatar) navAvatar.src = newPhotoUrl;
+                if (userAvatar) userAvatar.src = newPhotoUrl;
+
+            } catch (error) {
+                profileMsg.style.color = "red";
+                profileMsg.textContent = "ลิงก์รูปภาพไม่ถูกต้อง หรือเกิดข้อผิดพลาด";
+            } finally {
+                savePhotoBtn.disabled = false;
+                savePhotoBtn.textContent = "บันทึกรูป";
             }
         }
     });
