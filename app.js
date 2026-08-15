@@ -278,3 +278,60 @@ const create3DBackground = () => {
 
 // เรียกใช้งาน
 create3DBackground();
+// --- ระบบข้อความเครดิตลอยไปมา (DVD Logo Bounce Style) ---
+const createFloatingCredits = () => {
+    // ลบอันเก่าออกก่อนเผื่อมีซ้ำ
+    const oldCredits = document.getElementById('floating-credits');
+    if (oldCredits) oldCredits.remove();
+
+    // สร้างกล่องข้อความเครดิต
+    const credits = document.createElement('div');
+    credits.id = 'floating-credits';
+    credits.innerHTML = "✨ พัฒนาโดย: <strong>[ใส่ชื่อของคุณตรงนี้]</strong> ✨"; // ✏️ แก้ไขชื่อของคุณได้เลย
+    
+    // แต่งหน้าตาข้อความ
+    credits.style.position = 'fixed';
+    credits.style.fontSize = '30px'; // ขนาดตัวหนังสือ
+    credits.style.color = '#315efb'; // สีตัวหนังสือ (สีฟ้าของเว็บ)
+    credits.style.textShadow = '0 4px 10px rgba(49, 94, 251, 0.3)'; // เงาให้ดูมีมิติ
+    credits.style.zIndex = '1000';
+    credits.style.pointerEvents = 'none'; // 🌟 ทะลุการคลิกได้ ไม่บังปุ่มด้านล่าง
+    credits.style.whiteSpace = 'nowrap';
+    document.body.appendChild(credits);
+
+    // ตั้งค่าเริ่มต้น (จุดเกิด และ ความเร็ว)
+    let rect = credits.getBoundingClientRect();
+    let x = (window.innerWidth - rect.width) / 2; // เกิดตรงกลางแกน X
+    let y = (window.innerHeight - rect.height) / 2; // เกิดตรงกลางแกน Y
+    let dx = 2.5; // ความเร็วแนวนอน (ปรับเพิ่ม-ลดได้)
+    let dy = 2.5; // ความเร็วแนวตั้ง (ปรับเพิ่ม-ลดได้)
+
+    // ฟังก์ชันคำนวณการเคลื่อนที่และเด้งชนขอบ
+    const animateCredits = () => {
+        rect = credits.getBoundingClientRect();
+        
+        // ตรวจสอบการชนขอบจอซ้าย-ขวา
+        if (x + rect.width >= window.innerWidth || x <= 0) {
+            dx = -dx; // สลับทิศทาง
+        }
+        // ตรวจสอบการชนขอบจอบน-ล่าง
+        if (y + rect.height >= window.innerHeight || y <= 0) {
+            dy = -dy; // สลับทิศทาง
+        }
+
+        // อัปเดตตำแหน่ง
+        x += dx;
+        y += dy;
+        credits.style.left = x + 'px';
+        credits.style.top = y + 'px';
+
+        // วนลูปการทำงาน
+        requestAnimationFrame(animateCredits);
+    };
+
+    // เริ่มการทำงาน
+    animateCredits();
+};
+
+// เรียกใช้งานฟังก์ชัน
+createFloatingCredits();
