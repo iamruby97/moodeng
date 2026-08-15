@@ -1,49 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const settingsBtn = document.getElementById('settings-btn');
-    const settingsMenu = document.getElementById('settings-menu');
+    const profileBtn = document.getElementById('profile-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    
     const profileImg = document.getElementById('profile-img');
+    const dropdownImg = document.getElementById('dropdown-img');
     const imageInput = document.getElementById('image-input');
+    
     const usernameText = document.getElementById('username-text');
     const nameInput = document.getElementById('name-input');
     const saveNameBtn = document.getElementById('save-name-btn');
 
-    // เปิด-ปิดเมนูตั้งค่า
-    if (settingsBtn && settingsMenu) {
-        settingsBtn.addEventListener('click', (e) => {
+    // กดรูปโปรไฟล์แล้วสลับแสดง/ซ่อน Dropdown UI
+    if (profileBtn && profileDropdown) {
+        profileBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            settingsMenu.classList.toggle('hidden');
+            profileDropdown.classList.toggle('hidden');
         });
 
-        // ปิดเมนูเมื่อคลิกนอกพื้นที่
+        // คลิกพื้นที่อื่นนอก Dropdown ให้ซ่อนอัตโนมัติ
         document.addEventListener('click', (e) => {
-            if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) {
-                settingsMenu.classList.add('hidden');
+            if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
             }
         });
     }
 
-    // ระบบเปลี่ยนรูปโปรไฟล์
-    if (imageInput && profileImg) {
+    // เปลี่ยนรูปโปรไฟล์ (อัปเดตทั้ง 2 จุด)
+    if (imageInput) {
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    profileImg.src = event.target.result;
+                    const newImgSrc = event.target.result;
+                    if (profileImg) profileImg.src = newImgSrc;
+                    if (dropdownImg) dropdownImg.src = newImgSrc;
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
 
-    // ระบบเปลี่ยนชื่อโปรไฟล์
+    // บันทึกเปลี่ยนชื่อโปรไฟล์
     if (saveNameBtn && nameInput && usernameText) {
         saveNameBtn.addEventListener('click', () => {
             const newName = nameInput.value.trim();
             if (newName !== '') {
                 usernameText.textContent = newName;
                 nameInput.value = '';
-                settingsMenu.classList.add('hidden');
             }
         });
     }
