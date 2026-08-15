@@ -21,7 +21,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+const defaultAvatar = "https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng";
+
+// เพิ่มฟังก์ชันคลิกเลือกรูป Preset
+window.selectPreset = (url) => {
+    const photoUrlInput = document.getElementById('photoUrlInput');
+    if (photoUrlInput) {
+        photoUrlInput.value = url;
+    }
+};
 
 // --- ตรวจสอบสถานะการล็อกอินอัตโนมัติ ---
 onAuthStateChanged(auth, (user) => {
@@ -62,7 +70,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// --- 1. ระบบสมัครสมาชิก ---
+// --- 1. สมัครสมาชิก ---
 const signupForm = document.getElementById('signupForm');
 const message = document.getElementById('message');
 
@@ -84,7 +92,7 @@ if (signupForm) {
     });
 }
 
-// --- 2. ระบบเข้าสู่ระบบ ---
+// --- 2. เข้าสู่ระบบ ---
 const loginForm = document.getElementById('loginForm');
 const loginMessage = document.getElementById('loginMessage');
 
@@ -106,7 +114,7 @@ if (loginForm) {
     });
 }
 
-// --- 3. ระบบออกจากระบบ ---
+// --- 3. ออกจากระบบ ---
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
@@ -119,7 +127,7 @@ if (logoutBtn) {
     });
 }
 
-// --- 4. บันทึก/แก้ไขชื่อโปรไฟล์ ---
+// --- 4. บันทึกชื่อโปรไฟล์ ---
 const saveProfileBtn = document.getElementById('saveProfileBtn');
 const profileMsg = document.getElementById('profileMsg');
 
@@ -129,7 +137,7 @@ if (saveProfileBtn) {
         const currentUser = auth.currentUser;
 
         if (!newName) {
-            profileMsg.style.color = "red";
+            profileMsg.style.color = "#ef4444";
             profileMsg.textContent = "กรุณากรอกชื่อโปรไฟล์";
             return;
         }
@@ -141,8 +149,8 @@ if (saveProfileBtn) {
 
                 await updateProfile(currentUser, { displayName: newName });
 
-                profileMsg.style.color = "green";
-                profileMsg.textContent = "อัปเดตชื่อโปรไฟล์สำเร็จ! 🎉";
+                profileMsg.style.color = "#10b981";
+                profileMsg.textContent = "อัปเดตชื่อโปรไฟล์สำเร็จ! ✨";
 
                 const userDisplayNameEl = document.getElementById('userDisplayName');
                 const welcomeNameEl = document.getElementById('welcomeName');
@@ -150,17 +158,17 @@ if (saveProfileBtn) {
                 if (welcomeNameEl) welcomeNameEl.textContent = newName;
 
             } catch (error) {
-                profileMsg.style.color = "red";
+                profileMsg.style.color = "#ef4444";
                 profileMsg.textContent = "เกิดข้อผิดพลาด: " + error.message;
             } finally {
                 saveProfileBtn.disabled = false;
-                saveProfileBtn.textContent = "บันทึกชื่อ";
+                saveProfileBtn.textContent = "บันทึก";
             }
         }
     });
 }
 
-// --- 5. บันทึก/แก้ไขรูปโปรไฟล์ (Photo URL) ---
+// --- 5. บันทึกรูปโปรไฟล์ ---
 const savePhotoBtn = document.getElementById('savePhotoBtn');
 
 if (savePhotoBtn) {
@@ -169,8 +177,8 @@ if (savePhotoBtn) {
         const currentUser = auth.currentUser;
 
         if (!newPhotoUrl) {
-            profileMsg.style.color = "red";
-            profileMsg.textContent = "กรุณากรอกลิงก์รูปภาพ (URL)";
+            profileMsg.style.color = "#ef4444";
+            profileMsg.textContent = "กรุณากรอกหรือเลือกรูปภาพ";
             return;
         }
 
@@ -181,7 +189,7 @@ if (savePhotoBtn) {
 
                 await updateProfile(currentUser, { photoURL: newPhotoUrl });
 
-                profileMsg.style.color = "green";
+                profileMsg.style.color = "#10b981";
                 profileMsg.textContent = "เปลี่ยนรูปโปรไฟล์สำเร็จ! 🖼️";
 
                 const navAvatar = document.getElementById('navAvatar');
@@ -190,7 +198,7 @@ if (savePhotoBtn) {
                 if (userAvatar) userAvatar.src = newPhotoUrl;
 
             } catch (error) {
-                profileMsg.style.color = "red";
+                profileMsg.style.color = "#ef4444";
                 profileMsg.textContent = "ลิงก์รูปภาพไม่ถูกต้อง หรือเกิดข้อผิดพลาด";
             } finally {
                 savePhotoBtn.disabled = false;
