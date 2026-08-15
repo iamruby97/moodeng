@@ -95,3 +95,43 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     padding: 24px;
 }
+/* =========================================
+   สไตล์ป้าย IG เครดิตลอย (ขนาดเล็ก + กดคลิกได้)
+   ========================================= */
+.ig-floating-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 5px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(225, 48, 108, 0.4); /* สีชมพู Instagram */
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    pointer-events: auto !important; /* 🌟 สำคัญ: ทำให้กดคลิกที่ป้ายได้ */
+    cursor: pointer;
+}
+
+/* อนิเมชันเวลาเอาเมาส์ไปชี้ */
+.ig-floating-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(225, 48, 108, 0.35);
+}
+
+/* รูปโปรไฟล์ขนาดเล็ก */
+.ig-floating-card img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e1306c;
+}
+
+/* ข้อความชื่อ IG */
+.ig-floating-card span {
+    font-size: 13px; /* ย่อขนาดตัวอักษรลง */
+    font-weight: 600;
+    color: #262626;
+}
