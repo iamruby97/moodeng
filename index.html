@@ -1,1 +1,77 @@
-<link rel="stylesheet" href="style.css?v=9999">
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUVA Learn Track</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=9999">
+</head>
+<body>
+
+    <!-- แถบด้านบน Navbar -->
+    <header class="navbar">
+        <div class="logo">📚 EDUVA Learn Track</div>
+
+        <!-- โปรไฟล์และปุ่มตั้งค่าขวาบนสุด -->
+        <div class="user-profile-wrapper">
+            <div class="profile-card-top">
+                <img id="profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
+                <div class="user-info">
+                    <h2 id="username-text" class="username">puupy</h2>
+                    <p class="email">im1ssolddc@gmail.com</p>
+                </div>
+                <button id="settings-btn" class="settings-btn" title="ตั้งค่าโปรไฟล์">⚙️</button>
+            </div>
+
+            <!-- เมนูป๊อปอัพตั้งค่า -->
+            <div id="settings-menu" class="settings-dropdown hidden">
+                <div class="input-group">
+                    <label>✏️ เปลี่ยนชื่อโปรไฟล์</label>
+                    <div class="input-inline">
+                        <input type="text" id="name-input" placeholder="กรอกชื่อใหม่">
+                        <button id="save-name-btn">บันทึก</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>🖼️ อัปโหลดรูปโปรไฟล์</label>
+                    <input type="file" id="image-input" accept="image/*">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- คอนเทนเนอร์เนื้อหาหลักตรงกลาง -->
+    <main class="dashboard-container">
+        <section class="grid-cards">
+            <div class="card">
+                <h3>📖 วิชาที่กำลังเรียน</h3>
+                <ul>
+                    <li>Web Development (HTML/CSS/JS)</li>
+                    <li>Firebase Database Integration</li>
+                    <li>UI/UX Design Basics</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>✅ งานที่ต้องทำ (To-Do)</h3>
+                <ul>
+                    <li>อัปเดตระบบล็อกอิน Firebase</li>
+                    <li>จัดหน้าแดชบอร์ดให้สวยงาม</li>
+                    <li>ทดสอบระบบบนมือถือ</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>📊 เป้าหมายสัปดาห์นี้</h3>
+                <p>ความก้าวหน้า: <strong>75%</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="app.js?v=9999"></script>
+</body>
+</html>
