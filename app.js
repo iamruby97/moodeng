@@ -10,14 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('name-input');
     const saveNameBtn = document.getElementById('save-name-btn');
 
-    // กดรูปโปรไฟล์แล้วสลับแสดง/ซ่อน Dropdown UI
+    // สลับเปิด-ปิด Dropdown เมื่อกดรูปโปรไฟล์
     if (profileBtn && profileDropdown) {
         profileBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
         });
 
-        // คลิกพื้นที่อื่นนอก Dropdown ให้ซ่อนอัตโนมัติ
         document.addEventListener('click', (e) => {
             if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
                 profileDropdown.classList.add('hidden');
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // เปลี่ยนรูปโปรไฟล์ (อัปเดตทั้ง 2 จุด)
+    // เปลี่ยนรูปโปรไฟล์
     if (imageInput) {
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -41,13 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // บันทึกเปลี่ยนชื่อโปรไฟล์
+    // เปลี่ยนชื่อโปรไฟล์
     if (saveNameBtn && nameInput && usernameText) {
         saveNameBtn.addEventListener('click', () => {
             const newName = nameInput.value.trim();
             if (newName !== '') {
                 usernameText.textContent = newName;
                 nameInput.value = '';
+                profileDropdown.classList.add('hidden');
             }
         });
     }
