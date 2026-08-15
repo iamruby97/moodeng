@@ -3,61 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=13">
+    <title>EDUVA Learn Track</title>
+    <!-- นำเข้าฟอนต์ Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- อย่าลืมเปลี่ยนเลข ?v= ทุกครั้งที่แก้ไขโค้ดเพื่อล้างแคช -->
+    <link rel="stylesheet" href="style.css?v=2001">
 </head>
 <body>
 
-    <div class="auth-container">
-        <div class="auth-card">
-            <h2>📚 EDUVA Learn Track</h2>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">ยินดีต้อนรับสู่ระบบติดตามการเรียนรู้</p>
+    <!-- =========================================
+         พื้นที่ใส่ UI หลักของเว็บคุณ (วางไว้ตรงนี้ได้เลย)
+         ========================================= -->
+    <main class="main-content">
+        <header class="app-header">
+            <h1>📚 EDUVA Learn Track</h1>
+        </header>
 
-            <!-- ฟอร์มเข้าสู่ระบบ -->
-            <div id="loginBox">
-                <h3>เข้าสู่ระบบ</h3>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label>อีเมล:</label>
-                        <input type="email" id="loginEmail" class="input-field" placeholder="example@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>รหัสผ่าน:</label>
-                        <input type="password" id="loginPassword" class="input-field" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
-                </form>
-                <p id="loginMessage" class="msg-box"></p>
-                <p style="font-size: 13px; margin-top: 15px;">ยังไม่มีบัญชี? <a href="#" onclick="toggleAuth(true)" style="color:#315efb; font-weight:600;">สมัครสมาชิกที่นี่</a></p>
+        <section class="user-card">
+            <div class="profile-section">
+                <!-- ใส่รูปโปรไฟล์ของคุณ -->
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-avatar">
+                <div class="user-info">
+                    <h2>puupy</h2>
+                    <p>student@email.com</p>
+                </div>
             </div>
 
-            <!-- ฟอร์มสมัครสมาชิก -->
-            <div id="signupBox" style="display: none;">
-                <h3>สมัครสมาชิก</h3>
-                <form id="signupForm">
-                    <div class="form-group">
-                        <label>อีเมล:</label>
-                        <input type="email" id="email" class="input-field" placeholder="example@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>รหัสผ่าน (อย่างน้อย 6 ตัว):</label>
-                        <input type="password" id="password" class="input-field" placeholder="••••••••" minlength="6" required>
-                    </div>
-                    <button type="submit" class="btn-primary" style="background-color: #10b981;">สมัครสมาชิก</button>
-                </form>
-                <p id="message" class="msg-box"></p>
-                <p style="font-size: 13px; margin-top: 15px;">มีบัญชีอยู่แล้ว? <a href="#" onclick="toggleAuth(false)" style="color:#315efb; font-weight:600;">เข้าสู่ระบบ</a></p>
+            <!-- กล่องเป้าหมายประจำสัปดาห์ -->
+            <div class="goal-box">
+                <div class="goal-header">
+                    <span>📊 เป้าหมายสัปดาห์นี้</span>
+                    <span class="goal-percent">75%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
+                </div>
             </div>
+        </section>
+    </main>
 
-        </div>
-    </div>
-
-    <script>
-        function toggleAuth(showSignup) {
-            document.getElementById('loginBox').style.display = showSignup ? 'none' : 'block';
-            document.getElementById('signupBox').style.display = showSignup ? 'block' : 'none';
-        }
-    </script>
-    <script type="module" src="app.js?v=13"></script>
+    <!-- ดึงไฟล์ JS มาทำงาน -->
+    <script type="module" src="app.js?v=2001"></script>
 </body>
 </html>
