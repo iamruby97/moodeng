@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
     <style>
         * { box-sizing: border-box; }
         
@@ -55,6 +55,17 @@
             font-weight: bold;
         }
         .btn-logout:hover { background-color: #bd2130; }
+
+        .btn-save {
+            padding: 8px 16px;
+            background-color: #315efb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-save:hover { background-color: #1a44db; }
     </style>
 </head>
 <body>
@@ -63,7 +74,7 @@
     <nav class="navbar">
         <h2>📚 EDUVA Learn Track</h2>
         <div class="user-info">
-            <span id="userEmail" style="font-weight: bold; color: #315efb;">กำลังโหลด...</span>
+            <span id="userDisplayName" style="font-weight: bold; color: #315efb;">กำลังโหลด...</span>
             <button id="logoutBtn" class="btn-logout">ออกจากระบบ</button>
         </div>
     </nav>
@@ -71,10 +82,20 @@
     <!-- พื้นที่เนื้อหาหลัก -->
     <div class="container">
         
-        <!-- การ์ดต้อนรับ -->
+        <!-- การ์ดต้อนรับ + ตั้งค่าโปรไฟล์ -->
         <div class="card">
-            <h2>ยินดีต้อนรับกลับมา! 🎉</h2>
-            <p style="color: #666;">ยินดีต้อนรับสู่พื้นที่เรียนรู้ส่วนตัวของคุณ เริ่มต้นบันทึกความก้าวหน้าและการเรียนของวันนี้ได้เลย</p>
+            <h2>ยินดีต้อนรับกลับมา, <span id="welcomeName" style="color: #315efb;">ผู้ใช้งาน</span>! 🎉</h2>
+            <p style="color: #666; margin-bottom: 15px;">อีเมลบัญชีของคุณ: <span id="userEmail" style="font-weight: bold; color: #333;">กำลังโหลด...</span></p>
+
+            <!-- กล่องเปลี่ยนชื่อโปรไฟล์ -->
+            <div style="background: #f0f4ff; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                <h4 style="margin: 0 0 10px 0; color: #333;">✏️ แก้ไขชื่อโปรไฟล์ (Display Name)</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="displayNameInput" placeholder="กรอกชื่อโปรไฟล์ของคุณ" style="flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px;">
+                    <button id="saveProfileBtn" class="btn-save">บันทึกชื่อ</button>
+                </div>
+                <p id="profileMsg" style="margin: 8px 0 0 0; font-size: 14px; font-weight: bold;"></p>
+            </div>
         </div>
 
         <!-- โซนฟีเจอร์ต่างๆ -->
@@ -112,6 +133,6 @@
         </div>
     </div>
 
-    <script type="module" src="app.js"></script>
+    <script type="module" src="app.js?v=3"></script>
 </body>
 </html>
