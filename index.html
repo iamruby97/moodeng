@@ -19,14 +19,33 @@
             color: #333;
         }
 
-        /* เคลียร์ UI โปรไฟล์เดิมที่เรนเดอร์ค้างกลางหน้าจอ */
-        main > img, main > h2, main > p, 
+        /* -------------------------------------------------------------
+           1. บังคับซ่อน Element โปรไฟล์เดิมทุกรูปแบบที่ JS เก่าสร้างขึ้นมา
+        ------------------------------------------------------------- */
+        body > img, 
+        body > h2, 
+        body > p,
+        .dashboard-container > img,
+        .dashboard-container > h2,
+        .dashboard-container > p,
         .dashboard-container > div:first-child:not(.grid-cards),
-        .user-card, .profile-card {
+        [class*="user-profile"]:not(.navbar *),
+        [class*="profile-card"]:not(.navbar *) {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            height: 0 !important;
+            width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: absolute !important;
+            left: -9999px !important;
         }
 
-        /* Navbar ด้านบน */
+        /* -------------------------------------------------------------
+           2. Navbar ด้านบนสุด
+        ------------------------------------------------------------- */
         .navbar {
             width: 100%;
             height: 65px;
@@ -37,7 +56,7 @@
             justify-content: space-between;
             align-items: center;
             position: relative;
-            z-index: 9999;
+            z-index: 99999;
         }
 
         .logo {
@@ -46,12 +65,14 @@
             color: #1a73e8;
         }
 
-        /* ส่วนโปรไฟล์ขวาบน */
-        .profile-container {
+        /* -------------------------------------------------------------
+           3. โปรไฟล์ขวาบน (ปุ่มรูปกลม + Popover)
+        ------------------------------------------------------------- */
+        .profile-wrapper {
             position: relative;
         }
 
-        .profile-avatar-btn {
+        .avatar-btn {
             background: none;
             border: none;
             cursor: pointer;
@@ -61,21 +82,21 @@
             outline: none;
         }
 
-        .profile-avatar-btn img {
+        .avatar-btn img {
             width: 42px !important;
             height: 42px !important;
             border-radius: 50% !important;
             object-fit: cover !important;
             border: 2px solid #1a73e8 !important;
+            display: block !important;
             transition: transform 0.2s ease;
         }
 
-        .profile-avatar-btn img:hover {
-            transform: scale(1.05);
+        .avatar-btn img:hover {
+            transform: scale(1.08);
         }
 
-        /* Popover Menu ที่แสดงเมื่อกดรูปโปรไฟล์ */
-        .profile-popover {
+        .profile-dropdown {
             position: absolute;
             top: 55px;
             right: 0;
@@ -88,45 +109,46 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            z-index: 10000;
+            z-index: 100000;
         }
 
         .hidden {
             display: none !important;
         }
 
-        .popover-header {
+        .dropdown-header {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .popover-header img {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
+        .dropdown-header img {
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            display: block !important;
         }
 
-        .popover-user-info h4 {
+        .user-info h4 {
             font-size: 14px;
             font-weight: 600;
             color: #1e293b;
             line-height: 1.2;
         }
 
-        .popover-user-info p {
+        .user-info p {
             font-size: 11px;
             color: #64748b;
             word-break: break-all;
         }
 
-        .popover-divider {
+        .divider {
             border: none;
             border-top: 1px solid #f1f5f9;
         }
 
-        .popover-body {
+        .dropdown-body {
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -164,7 +186,9 @@
             font-size: 12px;
         }
 
-        /* การ์ดคอนเทนต์หลัก */
+        /* -------------------------------------------------------------
+           4. การ์ดคอนเทนต์หลัก
+        ------------------------------------------------------------- */
         .dashboard-container {
             max-width: 900px;
             margin: 50px auto;
@@ -219,34 +243,34 @@
         <div class="logo">📚 EDUVA Learn Track</div>
 
         <!-- ปุ่มรูปโปรไฟล์ทรงกลมมุมขวาบน -->
-        <div class="profile-container">
-            <button id="profile-avatar-btn" class="profile-avatar-btn">
-                <img id="nav-profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+        <div class="profile-wrapper">
+            <button id="avatar-btn" class="avatar-btn">
+                <img id="nav-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
             </button>
 
-            <!-- Popover แสดงชื่อ-อีเมล เมื่อกดที่รูป -->
-            <div id="profile-popover" class="profile-popover hidden">
-                <div class="popover-header">
-                    <img id="popover-profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
-                    <div class="popover-user-info">
-                        <h4 id="display-username">puupy</h4>
-                        <p id="display-email">im1ssolddc@gmail.com</p>
+            <!-- Popover UI ที่เด้งลงมาเมื่อกดรูปโปรไฟล์ -->
+            <div id="profile-dropdown" class="profile-dropdown hidden">
+                <div class="dropdown-header">
+                    <img id="menu-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                    <div class="user-info">
+                        <h4 id="user-name">puupy</h4>
+                        <p id="user-email">im1ssolddc@gmail.com</p>
                     </div>
                 </div>
 
-                <hr class="popover-divider">
+                <hr class="divider">
 
-                <div class="popover-body">
+                <div class="dropdown-body">
                     <div class="input-group">
                         <label>✏️ เปลี่ยนชื่อโปรไฟล์</label>
                         <div class="input-inline">
-                            <input type="text" id="new-name-input" placeholder="กรอกชื่อใหม่">
-                            <button id="btn-save-name">บันทึก</button>
+                            <input type="text" id="name-input" placeholder="กรอกชื่อใหม่">
+                            <button id="save-name-btn">บันทึก</button>
                         </div>
                     </div>
                     <div class="input-group">
                         <label>🖼️ เปลี่ยนรูปโปรไฟล์</label>
-                        <input type="file" id="new-image-input" accept="image/*" style="font-size: 11px;">
+                        <input type="file" id="image-input" accept="image/*" style="font-size: 11px;">
                     </div>
                 </div>
             </div>
@@ -285,57 +309,69 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const avatarBtn = document.getElementById('profile-avatar-btn');
-            const popover = document.getElementById('profile-popover');
-            
-            const navImg = document.getElementById('nav-profile-img');
-            const popoverImg = document.getElementById('popover-profile-img');
-            const fileInput = document.getElementById('new-image-input');
-            
-            const displayUsername = document.getElementById('display-username');
-            const nameInput = document.getElementById('new-name-input');
-            const saveNameBtn = document.getElementById('btn-save-name');
-
-            // สลับการแสดง Popover UI เมื่อกดรูปโปรไฟล์
-            if (avatarBtn && popover) {
-                avatarBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    popover.classList.toggle('hidden');
-                });
-
-                document.addEventListener('click', (e) => {
-                    if (!popover.contains(e.target) && !avatarBtn.contains(e.target)) {
-                        popover.classList.add('hidden');
+            // -------------------------------------------------------------
+            // ระบบตรวจจับและสั่งกำจัด Element โปรไฟล์ซ้ำซ้อนทันทีที่ถูกแอบสร้าง
+            // -------------------------------------------------------------
+            const cleanOldProfile = () => {
+                const nodes = document.querySelectorAll('body > img, body > h2, body > p, main > img, main > h2, main > p');
+                nodes.forEach(node => {
+                    if (!node.closest('.navbar')) {
+                        node.remove();
                     }
                 });
-            }
+            };
+
+            cleanOldProfile();
+            const observer = new MutationObserver(cleanOldProfile);
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            // -------------------------------------------------------------
+            // ระบบจัดการ UI โปรไฟล์ขวาบน
+            // -------------------------------------------------------------
+            const avatarBtn = document.getElementById('avatar-btn');
+            const dropdown = document.getElementById('profile-dropdown');
+            const navImg = document.getElementById('nav-img');
+            const menuImg = document.getElementById('menu-img');
+            const imageInput = document.getElementById('image-input');
+            const userName = document.getElementById('user-name');
+            const nameInput = document.getElementById('name-input');
+            const saveNameBtn = document.getElementById('save-name-btn');
+
+            // เปิด/ปิด Dropdown เมื่อคลิกที่รูป
+            avatarBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle('hidden');
+            });
+
+            // ปิด Dropdown เมื่อคลิกข้างนอก
+            document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
 
             // เปลี่ยนรูปภาพ
-            if (fileInput) {
-                fileInput.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (evt) => {
-                            navImg.src = evt.target.result;
-                            popoverImg.src = evt.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        navImg.src = evt.target.result;
+                        menuImg.src = evt.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
-            // บันทึกเปลี่ยนชื่อ
-            if (saveNameBtn && nameInput && displayUsername) {
-                saveNameBtn.addEventListener('click', () => {
-                    const val = nameInput.value.trim();
-                    if (val !== '') {
-                        displayUsername.textContent = val;
-                        nameInput.value = '';
-                        popover.classList.add('hidden');
-                    }
-                });
-            }
+            // เปลี่ยนชื่อ
+            saveNameBtn.addEventListener('click', () => {
+                const val = nameInput.value.trim();
+                if (val !== '') {
+                    userName.textContent = val;
+                    nameInput.value = '';
+                    dropdown.classList.add('hidden');
+                }
+            });
         });
     </script>
 </body>
