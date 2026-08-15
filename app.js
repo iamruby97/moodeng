@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// โค้ด Firebase Config ของคุณ
 const firebaseConfig = {
   apiKey: "AIzaSyB7nVG0DU8vI_yby6kWZ_4N0tKYBJI0pQw",
   authDomain: "moodeng-aa11a.firebaseapp.com",
@@ -12,11 +11,10 @@ const firebaseConfig = {
   measurementId: "G-0MHRE3Z9G5"
 };
 
-// เริ่มต้นใช้งาน Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// รับค่าจากฟอร์มสมัครสมาชิก
+// --- 1. ระบบสมัครสมาชิก (Signup) ---
 const signupForm = document.getElementById('signupForm');
 const message = document.getElementById('message');
 
@@ -27,27 +25,39 @@ if (signupForm) {
         const password = document.getElementById('password').value;
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await createUserWithEmailAndPassword(auth, email, password);
             message.style.color = "green";
-            message.textContent = "สมัครสมาชิกสำเร็จเรียบร้อย! 🎉";
-            signupForm.reset();
+            message.textContent = "สมัครสมาชิกสำเร็จ! 🎉 กำลังพากลับหน้าหลัก...";
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1500);
         } catch (error) {
             message.style.color = "red";
             message.textContent = "เกิดข้อผิดพลาด: " + error.message;
         }
     });
 }
-try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    message.style.color = "green";
-    message.textContent = "สมัครสมาชิกสำเร็จเรียบร้อย! 🎉 กำลังพากลับหน้าหลัก...";
-    
-    // หน่วงเวลา 1.5 วินาที แล้วพาเด้งไปหน้า index.html
-    setTimeout(() => {
-        window.location.href = "index.html";
-    }, 1500);
 
-} catch (error) {
-    message.style.color = "red";
-    message.textContent = "เกิดข้อผิดพลาด: " + error.message;
+// --- 2. ระบบเข้าสู่ระบบ (Login) ---
+const loginForm = document.getElementById('loginForm');
+const loginMessage = document.getElementById('loginMessage');
+
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            loginMessage.style.color = "green";
+            loginMessage.textContent = "เข้าสู่ระบบสำเร็จ! 🎉 กำลังพากลับหน้าหลัก...";
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1500);
+        } catch (error) {
+            loginMessage.style.color = "red";
+            loginMessage.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+        }
+    });
 }
