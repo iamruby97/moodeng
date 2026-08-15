@@ -253,17 +253,16 @@ if (fileInput) {
         }
     });
 }
-// --- สร้างพื้นหลัง 3D (Floating 3D Cubes) ---
+// =========================================
+// 1. ฟังก์ชันสร้างพื้นหลัง 3D (Floating Cubes)
+// =========================================
 const create3DBackground = () => {
-    // ลบพื้นหลังเก่าออกก่อนเผื่อมีค้างอยู่
-    const oldBg = document.querySelector('.bg-3d-area') || document.querySelector('.nature-bg');
+    const oldBg = document.querySelector('.bg-3d-area');
     if (oldBg) oldBg.remove();
 
-    // สร้างพื้นที่พื้นหลัง
     const bgArea = document.createElement('div');
     bgArea.className = 'bg-3d-area';
 
-    // สร้างกล่อง 10 ใบ
     const ul = document.createElement('ul');
     ul.className = 'bg-3d-cubes';
     for (let i = 0; i < 10; i++) {
@@ -272,66 +271,45 @@ const create3DBackground = () => {
     }
 
     bgArea.appendChild(ul);
-    // แทรกไปหลังสุด
     document.body.insertBefore(bgArea, document.body.firstChild);
 };
 
-// เรียกใช้งาน
-create3DBackground();
-// --- ระบบข้อความเครดิตลอยไปมา (DVD Logo Bounce Style) ---
+// =========================================
+// 2. ฟังก์ชันสร้าง IG เครดิตลอยช้าๆ ขนาดเล็ก (กดลิงก์ได้)
+// =========================================
 const createFloatingCredits = () => {
-    // ลบอันเก่าออกก่อนเผื่อมีซ้ำ
     const oldCredits = document.getElementById('floating-credits');
     if (oldCredits) oldCredits.remove();
 
-    // สร้างกล่องข้อความเครดิต
+    // ✏️ 1. เปลี่ยนเป็นชื่อ IG ของคุณ (ไม่ต้องใส่ @)
+    const igUsername = "instagram"; 
+    
+    // ✏️ 2. เปลี่ยนเป็น URL รูปโปรไฟล์ของคุณ
+    const profileImgUrl = "https://cdn-icons-png.flaticon.com/512/2111/2111463.png"; 
+
     const credits = document.createElement('div');
     credits.id = 'floating-credits';
-    credits.innerHTML = "✨ พัฒนาโดย: <strong>[ใส่ชื่อของคุณตรงนี้]</strong> ✨"; // ✏️ แก้ไขชื่อของคุณได้เลย
     
-    // แต่งหน้าตาข้อความ
+    credits.innerHTML = `
+        <a href="https://www.instagram.com/${igUsername}" target="_blank" rel="noopener noreferrer" class="ig-floating-card">
+            <img src="${profileImgUrl}" alt="IG Profile">
+            <span>@${igUsername}</span>
+        </a>
+    `;
+
     credits.style.position = 'fixed';
-    credits.style.fontSize = '30px'; // ขนาดตัวหนังสือ
-    credits.style.color = '#315efb'; // สีตัวหนังสือ (สีฟ้าของเว็บ)
-    credits.style.textShadow = '0 4px 10px rgba(49, 94, 251, 0.3)'; // เงาให้ดูมีมิติ
-    credits.style.zIndex = '1000';
-    credits.style.pointerEvents = 'none'; // 🌟 ทะลุการคลิกได้ ไม่บังปุ่มด้านล่าง
-    credits.style.whiteSpace = 'nowrap';
+    credits.style.zIndex = '999';
+    credits.style.pointerEvents = 'none'; // รอบๆ ไม่บังการกด UI
+    credits.style.userSelect = 'none';
     document.body.appendChild(credits);
 
-    // ตั้งค่าเริ่มต้น (จุดเกิด และ ความเร็ว)
     let rect = credits.getBoundingClientRect();
-    let x = (window.innerWidth - rect.width) / 2; // เกิดตรงกลางแกน X
-    let y = (window.innerHeight - rect.height) / 2; // เกิดตรงกลางแกน Y
-    let dx = 2.5; // ความเร็วแนวนอน (ปรับเพิ่ม-ลดได้)
-    let dy = 2.5; // ความเร็วแนวตั้ง (ปรับเพิ่ม-ลดได้)
+    let x = (window.innerWidth - rect.width) / 2;
+    let y = (window.innerHeight - rect.height) / 2;
+    
+    // ความเร็วในการลอย (0.8 = ช้านุ่มนวล)
+    let dx = 0.8; 
+    let dy = 0.8; 
 
-    // ฟังก์ชันคำนวณการเคลื่อนที่และเด้งชนขอบ
     const animateCredits = () => {
         rect = credits.getBoundingClientRect();
-        
-        // ตรวจสอบการชนขอบจอซ้าย-ขวา
-        if (x + rect.width >= window.innerWidth || x <= 0) {
-            dx = -dx; // สลับทิศทาง
-        }
-        // ตรวจสอบการชนขอบจอบน-ล่าง
-        if (y + rect.height >= window.innerHeight || y <= 0) {
-            dy = -dy; // สลับทิศทาง
-        }
-
-        // อัปเดตตำแหน่ง
-        x += dx;
-        y += dy;
-        credits.style.left = x + 'px';
-        credits.style.top = y + 'px';
-
-        // วนลูปการทำงาน
-        requestAnimationFrame(animateCredits);
-    };
-
-    // เริ่มการทำงาน
-    animateCredits();
-};
-
-// เรียกใช้งานฟังก์ชัน
-createFloatingCredits();
