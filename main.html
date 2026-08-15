@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile & Dashboard - EDUVA Learn Track</title>
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
     <style>
         * { box-sizing: border-box; }
         
@@ -126,15 +126,15 @@
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid #e2e8f0;
-            transition: 0.2s;
+            transition: all 0.2s ease;
             object-fit: cover;
             background: #fff;
         }
 
         .preset-avatar:hover {
             border-color: #315efb;
-            transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(49, 94, 251, 0.3);
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(49, 94, 251, 0.3);
         }
 
         .btn-action {
@@ -179,7 +179,7 @@
     <nav class="navbar">
         <h2>📚 EDUVA Learn Track</h2>
         <div class="user-info">
-            <img id="navAvatar" class="avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Fallback'" alt="Avatar">
+            <img id="navAvatar" class="avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" alt="Avatar">
             <span id="userDisplayName" style="font-weight: 600; color: #1e293b;">กำลังโหลด...</span>
             <button id="logoutBtn" class="btn-logout">ออกจากระบบ</button>
         </div>
@@ -191,7 +191,7 @@
             <div class="profile-banner"></div>
             
             <div class="avatar-large-container">
-                <img id="userAvatar" class="avatar-large" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Fallback'" alt="Profile Picture">
+                <img id="userAvatar" class="avatar-large" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng" alt="Profile Picture">
             </div>
 
             <h2 style="margin: 10px 0 2px 0; color: #0f172a;" id="welcomeName">ผู้ใช้งาน</h2>
@@ -210,18 +210,19 @@
                 <div class="settings-box">
                     <h4>🖼️ เลือกรูปโปรไฟล์ (Avatar)</h4>
                     
-                    <div style="font-size: 12px; color: #64748b; margin-bottom: 8px;">คลิกเลือกรูปการ์ตูนเพื่อเปลี่ยนทันที:</div>
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 8px;">คลิกเลือก Avatar สำเร็จรูป (เปลี่ยนทันที):</div>
                     <div class="preset-container">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Moodeng1')" title="Robot">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Ruby')" title="Avatar 1">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=Happy')" title="Emoji">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/big-smile/svg?seed=Cool" onclick="selectPreset('https://api.dicebear.com/7.x/big-smile/svg?seed=Cool')" title="Smile">
-                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/lorelei/svg?seed=Star" onclick="selectPreset('https://api.dicebear.com/7.x/lorelei/svg?seed=Star')" title="Star">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu" onclick="selectPreset('https://api.dicebear.com/7.x/bottts/svg?seed=Pikachu')" title="Robot">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix')" title="Boy">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia" onclick="selectPreset('https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia')" title="Girl">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat" onclick="selectPreset('https://api.dicebear.com/7.x/fun-emoji/svg?seed=CoolCat')" title="Emoji">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/adventurer/svg?seed=Hero" onclick="selectPreset('https://api.dicebear.com/7.x/adventurer/svg?seed=Hero')" title="Hero">
+                        <img class="preset-avatar" src="https://api.dicebear.com/7.x/big-smile/svg?seed=Happy" onclick="selectPreset('https://api.dicebear.com/7.x/big-smile/svg?seed=Happy')" title="Smile">
                     </div>
 
-                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px; margin-top: 12px;">หรือวาง URL รูปภาพจากเว็บ:</div>
+                    <div style="font-size: 12px; color: #64748b; margin-bottom: 6px; margin-top: 12px;">หรือวาง Direct Image URL (ลงท้าย .jpg, .png):</div>
                     <div class="input-group">
-                        <input type="url" id="photoUrlInput" class="input-field" placeholder="https://example.com/image.jpg">
+                        <input type="url" id="photoUrlInput" class="input-field" placeholder="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400">
                         <button id="savePhotoBtn" class="btn-action" style="background-color: #10b981;">บันทึกรูป</button>
                     </div>
                 </div>
@@ -261,6 +262,6 @@
 
     </div>
 
-    <script type="module" src="app.js?v=7"></script>
+    <script type="module" src="app.js?v=8"></script>
 </body>
 </html>
