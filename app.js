@@ -37,3 +37,17 @@ if (signupForm) {
         }
     });
 }
+try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    message.style.color = "green";
+    message.textContent = "สมัครสมาชิกสำเร็จเรียบร้อย! 🎉 กำลังพากลับหน้าหลัก...";
+    
+    // หน่วงเวลา 1.5 วินาที แล้วพาเด้งไปหน้า index.html
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 1500);
+
+} catch (error) {
+    message.style.color = "red";
+    message.textContent = "เกิดข้อผิดพลาด: " + error.message;
+}
