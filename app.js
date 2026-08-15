@@ -270,33 +270,58 @@ const createCursorGlow = () => {
         cursorGlow.style.top = e.clientY + 'px';
     });
 };
-
-// เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเว็บ
-createCursorGlow();
-// --- 8. สร้างพื้นหลัง 3D (Floating 3D Cubes) อัตโนมัติ ---
-const create3DBackground = () => {
-    // ตรวจสอบว่ามีพื้นหลังอยู่แล้วหรือไม่ (กันมันสร้างซ้ำ)
-    if (document.querySelector('.bg-3d-area')) return;
-
-    // สร้างกล่องหลักครอบพื้นหลัง
+// --- สร้างฉากป่าธรรมชาติ & ระบบรดน้ำ ---
+const createNatureScene = () => {
+    // 1. สร้างโครงสร้างป่า
     const bgArea = document.createElement('div');
-    bgArea.className = 'bg-3d-area';
-
-    // สร้าง ul สำหรับใส่กล่อง 3D
-    const ul = document.createElement('ul');
-    ul.className = 'bg-3d-cubes';
-
-    // ใส่กล่องเข้าไป 10 ใบ
-    for (let i = 0; i < 10; i++) {
-        const li = document.createElement('li');
-        ul.appendChild(li);
-    }
-
-    bgArea.appendChild(ul);
-    
-    // แทรกพื้นหลังนี้เข้าไปเป็นส่วนแรกสุดของ body
+    bgArea.className = 'nature-bg';
+    bgArea.innerHTML = `
+        <div class="nature-hill"></div>
+        <div class="nature-pond"></div>
+        <div class="nature-tree tree-left">🌳</div>
+        <div class="nature-tree tree-right">🌳</div>
+        <div class="nature-deer">🦌</div>
+    `;
+    // แทรกฉากหลังไปที่ส่วนบนสุดของ Body
     document.body.insertBefore(bgArea, document.body.firstChild);
+
+    // 2. ระบบเสกใบไม้ร่วง
+    setInterval(() => {
+        const leaf = document.createElement('div');
+        leaf.className = 'falling-leaf';
+        // สุ่มเลือกว่าจะเป็นใบไม้แห้งหรือใบไม้เขียว
+        leaf.innerText = Math.random() > 0.5 ? '🍂' : '🍃';
+        // สุ่มตำแหน่งแกน X
+        leaf.style.left = Math.random() * 100 + 'vw';
+        // สุ่มความเร็วในการตก (8 - 15 วินาที)
+        leaf.style.animationDuration = (Math.random() * 7 + 8) + 's';
+        
+        bgArea.appendChild(leaf);
+        
+        // ลบใบไม้ทิ้งเมื่อตกถึงพื้นเพื่อไม่ให้รกเครื่อง
+        setTimeout(() => leaf.remove(), 15000);
+    }, 800); // ออกใบใหม่ทุกๆ 0.8 วินาที
+
+    // 3. ระบบคลิกเพื่อรดน้ำ 
+    document.addEventListener('mousedown', (e) => {
+        // สร้างหยดน้ำ 4 หยดเวลากดเมาส์
+        for (let i = 0; i < 4; i++) {
+            setTimeout(() => {
+                const drop = document.createElement('div');
+                drop.className = 'water-drop';
+                drop.innerText = '💧';
+                // คำนวณให้ออกมาตรงปลายฝักบัวพอดี (อาจต้องกะระยะนิดหน่อย)
+                drop.style.left = (e.clientX - 15 + (Math.random() * 30)) + 'px';
+                drop.style.top = (e.clientY + 20) + 'px';
+                
+                document.body.appendChild(drop);
+                
+                // ลบหยดน้ำทิ้งเมื่ออนิเมชันจบ
+                setTimeout(() => drop.remove(), 600);
+            }, i * 100); // หยดน้ำออกไล่เลี่ยกัน
+        }
+    });
 };
 
 // เรียกใช้งานฟังก์ชัน
-create3DBackground();
+createNatureScene();
