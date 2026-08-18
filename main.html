@@ -142,7 +142,7 @@
             gap: 6px;
         }
 
-        .input-inline input {
+        .input-inline input[type="text"] {
             flex: 1;
             padding: 6px 8px;
             border: 1px solid rgba(0, 198, 255, 0.3);
@@ -244,6 +244,11 @@
                         <button id="save-name-btn">บันทึก</button>
                     </div>
                 </div>
+
+                <div class="input-group">
+                    <label>🖼️ เปลี่ยนรูปโปรไฟล์</label>
+                    <input type="file" id="image-input" accept="image/*" style="font-size: 11px;">
+                </div>
             </div>
         </div>
     </header>
@@ -282,14 +287,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <script>
-        // --- ระบบ 3D Background สี่เหลี่ยมสีน้ำเงินหมุนตามเมาส์ ---
+        // ==========================================
+        // 1. ระบบ 3D Background สี่เหลี่ยมสีน้ำเงินหมุนตามเมาส์
+        // ==========================================
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true });
 
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // สร้างกล่องสี่เหลี่ยม 3D
         const geometry = new THREE.BoxGeometry(2.2, 2.2, 2.2);
         const material = new THREE.MeshPhongMaterial({
             color: 0x0072ff,
@@ -298,7 +304,6 @@
         const cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
 
-        // เพิ่มแสงสว่างให้วัตถุ 3D
         const light = new THREE.DirectionalLight(0x00c6ff, 1.5);
         light.position.set(5, 5, 5);
         scene.add(light);
@@ -308,7 +313,6 @@
 
         camera.position.z = 5;
 
-        // ดักจับตำแหน่งเมาส์
         let mouseX = 0;
         let mouseY = 0;
         const windowHalfX = window.innerWidth / 2;
@@ -322,7 +326,6 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            // ขยับลูกบาศก์ตามการเคลื่อนไหวของเมาส์
             const targetX = mouseX * 0.001;
             const targetY = mouseY * 0.001;
             cube.rotation.y += 0.05 * (targetX - cube.rotation.y);
@@ -339,13 +342,34 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- ระบบเปิดปิด Dropdown โปรไฟล์ ---
+        // ==========================================
+        // 2. ระบบ UI และระบบบันทึกรูป/ชื่อ (localStorage)
+        // ==========================================
         const avatarBtn = document.getElementById('avatar-btn');
         const dropdown = document.getElementById('profile-dropdown');
+        const navImg = document.getElementById('nav-img');
+        const menuImg = document.getElementById('menu-img');
+        const imageInput = document.getElementById('image-input');
         const userName = document.getElementById('user-name');
         const nameInput = document.getElementById('name-input');
         const saveNameBtn = document.getElementById('save-name-btn');
 
+        // ดึงรูปภาพและชื่อที่เคยบันทึกไว้ใน localStorage ออกมาแสดงทันทีเมื่อโหลดหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedAvatar = localStorage.getItem('userAvatar');
+            const savedName = localStorage.getItem('userName');
+
+            if (savedAvatar) {
+                if (navImg) navImg.src = savedAvatar;
+                if (menuImg) menuImg.src = savedAvatar;
+            }
+
+            if (savedName) {
+                if (userName) userName.textContent = savedName;
+            }
+        });
+
+        // เปิด/ปิด Dropdown
         avatarBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             dropdown.classList.toggle('hidden');
@@ -357,15 +381,35 @@
             }
         });
 
+        // อัปโหลดรูปภาพใหม่ + เซฟลง localStorage กันรูปหายเวลารีเฟรช
+        if (imageInput) {
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        const base64Image = evt.target.result;
+
+                        if (navImg) navImg.src = base64Image;
+                        if (menuImg) menuImg.src = base64Image;
+
+                        localStorage.setItem('userAvatar', base64Image);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // เปลี่ยนชื่อ + เซฟลง localStorage
         saveNameBtn.addEventListener('click', () => {
             const val = nameInput.value.trim();
             if (val !== '') {
                 userName.textContent = val;
+                localStorage.setItem('userName', val);
                 nameInput.value = '';
                 dropdown.classList.add('hidden');
             }
         });
     </script>
-    <script type="module" src="app.js?v=999"></script>
 </body>
 </html>
